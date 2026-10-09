@@ -46,3 +46,20 @@ export interface AttachmentAccess {
   createdById: string;
   attachments: Attachment[];
 }
+
+export interface RequestListItem {
+  id: string;
+  title: string;
+  categoryName: string;
+  status: RequestStatus;
+  priority: Priority | null;
+  createdAt: Date;
+  createdBy?: { name: string };
+}
+
+export interface RequestListPage {
+  items: RequestListItem[];
+  total: number;
+  page: number;
+  limit: number;
+}

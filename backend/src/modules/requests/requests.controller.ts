@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   Post,
+  Query,
   Res,
   StreamableFile,
   UploadedFiles,
@@ -15,8 +16,9 @@ import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import { AuthenticatedUser } from '../../common/types/authenticated-user';
 import { UploadedImage } from './attachments/attachments.service';
 import { CreateRequestDto } from './dto/create-request.dto';
+import { ListRequestsQueryDto } from './dto/list-requests-query.dto';
 import { RequestsService } from './requests.service';
-import { RequestDetails } from './requests.types';
+import { RequestDetails, RequestListPage } from './requests.types';
 
 export const ATTACHMENTS_FIELD = 'files';
 
@@ -33,6 +35,22 @@ export class RequestsController {
     @UploadedFiles() files: UploadedImage[] | undefined,
   ): Promise<{ request: RequestDetails }> {
     return { request: await this.requestsService.create(body, user.id, files ?? []) };
+  }
+
+  @Get()
+  list(
+    @Query() query: ListRequestsQueryDto,
+    @CurrentUser() user: AuthenticatedUser,
+  ): Promise<RequestListPage> {
+    return this.requestsService.list(query, user);
+  }
+
+  @Get(':requestId')
+  async findOne(
+    @Param('requestId') requestId: string,
+    @CurrentUser() user: AuthenticatedUser,
+  ): Promise<{ request: RequestDetails }> {
+    return { request: await this.requestsService.findOne(requestId, user) };
   }
 
   @Get(':requestId/attachments/:attachmentId')

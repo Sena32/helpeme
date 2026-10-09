@@ -14,7 +14,7 @@ Status: ready · Marque `[x]` ao concluir. Cada tarefa lista as specs a ler.
 - [x] **T-08** Categories + seed (admin root e categorias, idempotente). · Ler: AC-09, AC-24
 - [x] **T-09** Requests: criação sem anexo + validações + índices. · Ler: AC-10/11/25
 - [x] **T-10** Upload: Multer, validação MIME/magic bytes/tamanho/quantidade, endpoint de download protegido. · Ler: AC-12..14, AC-30
-- [ ] **T-11** Listagem com escopo por role, paginação, ordenação data/prioridade, filtros. · Ler: AC-15..18
+- [x] **T-11** Listagem com escopo por role, paginação, ordenação data/prioridade, filtros. · Ler: AC-15..18
 - [ ] **T-12** Tratamento admin: prioridade, status, observação, resolução, transições. · Ler: AC-19..23
 - [ ] **T-13** Dashboard summary (aggregate). · Ler: AC-26/27
 - [ ] **T-14** Middleware de log estruturado + filtro global de erros. · Ler: AC-31

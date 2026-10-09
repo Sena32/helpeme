@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument, Types } from 'mongoose';
+import { HydratedDocument, Schema as MongooseSchema, Types } from 'mongoose';
 import { Priority, PRIORITY_RANK, UNSET_PRIORITY_RANK } from '../../../common/enums/priority.enum';
 import { RequestStatus } from '../../../common/enums/request-status.enum';
 import { Category } from '../../categories/schemas/category.model';
@@ -54,10 +54,10 @@ export class ServiceRequest {
   })
   description!: string;
 
-  @Prop({ type: Types.ObjectId, ref: Category.name, required: true })
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: Category.name, required: true })
   category!: Types.ObjectId;
 
-  @Prop({ type: Types.ObjectId, ref: User.name, required: true })
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: User.name, required: true })
   createdBy!: Types.ObjectId;
 
   @Prop({ type: String, enum: Object.values(RequestStatus), default: RequestStatus.Open })
@@ -78,7 +78,7 @@ export class ServiceRequest {
   @Prop({ type: Date, default: null })
   resolvedAt!: Date | null;
 
-  @Prop({ type: Types.ObjectId, ref: User.name, default: null })
+  @Prop({ type: MongooseSchema.Types.ObjectId, ref: User.name, default: null })
   resolvedBy!: Types.ObjectId | null;
 
   @Prop({

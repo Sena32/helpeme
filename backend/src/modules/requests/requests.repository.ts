@@ -7,7 +7,9 @@ import {
   NamedReference,
   NewRequestRecord,
   RequestDetails,
+  RequestListItem,
 } from './requests.types';
+import { RequestFilter, RequestSort } from './request-list-query';
 import { Attachment, ServiceRequest } from './schemas/service-request.model';
 
 const NAME_ONLY = 'name';
@@ -46,6 +48,26 @@ function toRequestDetails(document: PopulatedRequest): RequestDetails {
   };
 }
 
+function toListItem(document: PopulatedRequest, includeAuthor: boolean): RequestListItem {
+  const item: RequestListItem = {
+    id: document._id.toString(),
+    title: document.title,
+    categoryName: document.category.name,
+    status: document.status,
+    priority: document.priority,
+    createdAt: document.createdAt,
+  };
+  return includeAuthor ? { ...item, createdBy: { name: document.createdBy.name } } : item;
+}
+
+export interface RequestListCriteria {
+  filter: RequestFilter;
+  sort: RequestSort;
+  skip: number;
+  limit: number;
+  includeAuthor: boolean;
+}
+
 @Injectable()
 export class RequestsRepository {
   constructor(
@@ -58,7 +80,28 @@ export class RequestsRepository {
       category: categoryId,
       createdBy: createdById,
     });
-    return this.findDetailsById(created._id);
+    const details = await this.findDetailsById(created._id.toString());
+    if (!details) throw new NotFoundException(REQUEST_NOT_FOUND_MESSAGE);
+    return details;
+  }
+
+  async list({ filter, sort, skip, limit, includeAuthor }: RequestListCriteria): Promise<{
+    items: RequestListItem[];
+    total: number;
+  }> {
+    const [documents, total] = await Promise.all([
+      this.requestModel
+        .find(filter)
+        .select('title status priority createdAt category createdBy')
+        .sort(sort)
+        .skip(skip)
+        .limit(limit)
+        .populate<{ category: PopulatedReference }>('category', NAME_ONLY)
+        .populate<{ createdBy: PopulatedReference }>('createdBy', NAME_ONLY)
+        .lean<PopulatedRequest[]>(),
+      this.requestModel.countDocuments(filter),
+    ]);
+    return { items: documents.map((document) => toListItem(document, includeAuthor)), total };
   }
 
   async findAttachmentAccess(requestId: string): Promise<AttachmentAccess | null> {
@@ -71,13 +114,13 @@ export class RequestsRepository {
     return { createdById: document.createdBy.toString(), attachments: document.attachments };
   }
 
-  private async findDetailsById(id: Types.ObjectId): Promise<RequestDetails> {
+  async findDetailsById(id: string): Promise<RequestDetails | null> {
+    if (!isValidObjectId(id)) return null;
     const document = await this.requestModel
       .findById(id)
       .populate<{ category: PopulatedReference }>('category', NAME_ONLY)
       .populate<{ createdBy: PopulatedReference }>('createdBy', NAME_ONLY)
       .lean<PopulatedRequest>();
-    if (!document) throw new NotFoundException(REQUEST_NOT_FOUND_MESSAGE);
-    return toRequestDetails(document);
+    return document ? toRequestDetails(document) : null;
   }
 }

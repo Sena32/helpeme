@@ -21,3 +21,5 @@ Status: draft · Premissa vale até alguém decidir o contrário.
 | Q-16 | Biblioteca de hash | `bcryptjs` (algoritmo bcrypt, sem build nativo no Alpine); custo via `BCRYPT_ROUNDS` |
 | Q-17 | `forbidNonWhitelisted` × AC-04 (`role` no cadastro público) | `RegisterDto` aceita `role` (`@Allow`) e o descarta: 201 como `USER`; demais campos desconhecidos → 400 |
 | Q-18 | Acesso a anexo de outro usuário (AC-30 permite 403/404) | 404, para não revelar a existência da solicitação/anexo |
+| Q-19 | Padrões da listagem (API-09) | Ordenação padrão prioridade desc + data desc para todos os perfis (desempate `_id`); `limit` padrão 10, limitado a `PAGINATION_MAX_LIMIT`; `priority=UNSET` filtra não classificadas; `search` no título (case-insensitive); em prioridade asc as não classificadas vêm primeiro; `createdBy{name}` só para admin |
+| Q-20 | AC-16 (user `PATCH` → 403) citado na T-11 | Testado na T-12, junto com a rota `PATCH /requests/:id` |

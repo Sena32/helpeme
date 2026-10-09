@@ -1,4 +1,6 @@
 import { BadRequestException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { Env } from '../../config/env.schema';
 import { RequestStatus } from '../../common/enums/request-status.enum';
 import { CategoriesService } from '../categories/categories.service';
 import { AttachmentsService } from './attachments/attachments.service';
@@ -29,6 +31,7 @@ function buildService(repository: FakeRequestsRepository, category: CategorySumm
     repository as unknown as RequestsRepository,
     categoriesService as unknown as CategoriesService,
     attachmentsService as unknown as AttachmentsService,
+    { get: () => 50 } as unknown as ConfigService<Env, true>,
   );
 }
 
