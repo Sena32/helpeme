@@ -26,7 +26,7 @@ Status: ready · Marque `[x]` ao concluir. Cada tarefa lista as specs a ler.
 - [x] **T-18** Nova solicitação com upload e validações. · Ler: UI-07, AC-11..14
 - [x] **T-19** Dashboard Admin: KPIs + tabela ordenável/filtrável/paginada. · Ler: UI-02
 - [x] **T-20** Tratamento admin (prioridade, status, observação, finalizar). · Ler: UI-03
-- [ ] **T-21** Categorias e Usuários (admin). · Ler: UI-04/05
+- [x] **T-21** Categorias e Usuários (admin). · Ler: UI-04/05
 
 ## Fase 3 — Fechamento
 - [ ] **T-22** Revisão de acessibilidade/contraste e dark mode em todas as telas. · Ler: rules 03, AC-32

@@ -3,16 +3,14 @@ import { AppLayout } from '@/components/layout/AppLayout';
 import { AdminDashboardPage } from '@/features/admin/AdminDashboardPage';
 import { AdminRequestPage } from '@/features/admin/AdminRequestPage';
 import { AuthPage } from '@/features/auth/AuthPage';
+import { CategoriesPage } from '@/features/categories/CategoriesPage';
+import { NotFoundPage } from '@/features/errors/NotFoundPage';
 import { AuthGuard, RoleGuard } from '@/features/auth/guards';
 import { NewRequestPage } from '@/features/requests/NewRequestPage';
 import { RequestDetailPage } from '@/features/requests/RequestDetailPage';
+import { UsersPage } from '@/features/users/UsersPage';
 import { UserDashboardPage } from '@/features/requests/UserDashboardPage';
 import { ROLES } from '@/types/auth';
-
-// Placeholder pages; real screens arrive in T-21.
-function PlaceholderPage({ title }: { title: string }) {
-  return <h1 className="text-3xl font-semibold">{title}</h1>;
-}
 
 export function AppRoutes() {
   return (
@@ -28,12 +26,12 @@ export function AppRoutes() {
           <Route element={<RoleGuard allowedRoles={[ROLES.Admin]} />}>
             <Route path="/admin" element={<AdminDashboardPage />} />
             <Route path="/admin/solicitacoes/:requestId" element={<AdminRequestPage />} />
-            <Route path="/admin/categorias" element={<PlaceholderPage title="Categorias" />} />
-            <Route path="/admin/usuarios" element={<PlaceholderPage title="Usuários" />} />
+            <Route path="/admin/categorias" element={<CategoriesPage />} />
+            <Route path="/admin/usuarios" element={<UsersPage />} />
           </Route>
         </Route>
       </Route>
-      <Route path="*" element={<PlaceholderPage title="Página não encontrada" />} />
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 }
