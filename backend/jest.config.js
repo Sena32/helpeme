@@ -7,4 +7,6 @@ module.exports = {
   collectCoverageFrom: ['src/**/*.ts', '!src/main.ts'],
   testEnvironment: 'node',
   setupFiles: ['<rootDir>/test/setup-env.ts'],
+  globalSetup: '<rootDir>/test/mongo-global-setup.ts',
+  globalTeardown: '<rootDir>/test/mongo-global-teardown.ts',
 };

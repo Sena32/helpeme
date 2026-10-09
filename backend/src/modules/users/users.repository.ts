@@ -1,0 +1,42 @@
+import { ConflictException, Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model, mongo } from 'mongoose';
+import { User, UserDocument } from './schemas/user.model';
+import { NewUserRecord, PublicUser } from './users.types';
+
+export const EMAIL_ALREADY_REGISTERED_MESSAGE = 'E-mail já cadastrado.';
+const DUPLICATE_KEY_ERROR_CODE = 11000;
+
+function isDuplicateKeyError(error: unknown): boolean {
+  return error instanceof mongo.MongoServerError && error.code === DUPLICATE_KEY_ERROR_CODE;
+}
+
+function toPublicUser(document: UserDocument): PublicUser {
+  return {
+    id: document._id.toString(),
+    name: document.name,
+    email: document.email,
+    role: document.role,
+    createdAt: document.createdAt,
+    updatedAt: document.updatedAt,
+  };
+}
+
+@Injectable()
+export class UsersRepository {
+  constructor(@InjectModel(User.name) private readonly userModel: Model<User>) {}
+
+  async existsByEmail(email: string): Promise<boolean> {
+    const match = await this.userModel.exists({ email: email.trim().toLowerCase() });
+    return match !== null;
+  }
+
+  async create(record: NewUserRecord): Promise<PublicUser> {
+    try {
+      return toPublicUser(await this.userModel.create(record));
+    } catch (error) {
+      if (isDuplicateKeyError(error)) throw new ConflictException(EMAIL_ALREADY_REGISTERED_MESSAGE);
+      throw error;
+    }
+  }
+}

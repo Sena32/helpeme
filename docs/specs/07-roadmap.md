@@ -8,7 +8,7 @@ Status: ready · Marque `[x]` ao concluir. Cada tarefa lista as specs a ler.
 - [x] **T-04** Dockerfiles + compose funcional (mongo/backend/frontend). · Ler: 03
 
 ## Fase 1 — Backend
-- [ ] **T-05** Users: model, repository, service, política de senha. · Ler: 04, RN-01/02
+- [x] **T-05** Users: model, repository, service, política de senha. · Ler: 04, RN-01/02
 - [ ] **T-06** Auth: register/login/logout/me, JWT cookie, guards, `@Public`, throttler. · Ler: 05 API-01..04, AC-01..06
 - [ ] **T-07** Roles: `RolesGuard`, `POST /users` (admin cria admin). · Ler: AC-07/08, RN-03
 - [ ] **T-08** Categories + seed (admin root e categorias, idempotente). · Ler: AC-09, AC-24
