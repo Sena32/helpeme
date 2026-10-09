@@ -33,6 +33,7 @@ cd backend && npm install && npm run start:dev
 cd frontend && npm install && npm run dev
 ```
 Testes: `npm test` em `backend/` e em `frontend/`; setup do repositório: `node --test tests/infra/repo-setup.test.mjs`.
+Smoke ponta a ponta no Docker (passa pelo nginx): `./scripts/smoke.sh`; com banco vazio e projeto isolado: `SMOKE_FRESH=1 ./scripts/smoke.sh` (pare a stack padrão antes).
 
 ## Variáveis de ambiente
 Veja `.env.example` (todas obrigatórias, exceto as marcadas como opcionais). TODO: tabela resumida com descrição de cada variável.

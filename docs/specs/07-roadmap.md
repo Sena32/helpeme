@@ -30,7 +30,7 @@ Status: ready · Marque `[x]` ao concluir. Cada tarefa lista as specs a ler.
 
 ## Fase 3 — Fechamento
 - [x] **T-22** Revisão de acessibilidade/contraste e dark mode em todas as telas. · Ler: rules 03, AC-32
-- [ ] **T-23** Teste de fluxo ponta a ponta no Docker (smoke) e ajustes. · Ler: RNF-07
+- [x] **T-23** Teste de fluxo ponta a ponta no Docker (smoke) e ajustes. · Ler: RNF-07
 - [x] **T-26** Seed de usuário de teste `USER` via env (`SEED_USER_*`: Jose da Silva / user@test.com / User123@ no `.env.example`) + README. · Ler: RF-04, AC-33
 - [ ] **T-24** README final (instalação, execução, env, usuários de teste, solução, decisões). · Ler: rules 06
 - [ ] **T-25** Auditoria final: lint, `tsc`, `grep any`, segredos, cobertura. · Ler: rules 00, 02
