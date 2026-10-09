@@ -19,10 +19,17 @@ import { UsersModule } from './modules/users/users.module';
 
 // Local runs share the monorepo root .env; in Docker the variables come from env_file.
 const ROOT_ENV_FILE = '../.env';
+// Tests must depend only on their fixtures, never on a developer's local .env.
+const IS_TEST_RUN = process.env.NODE_ENV === 'test';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true, envFilePath: ROOT_ENV_FILE, validate: validateEnv }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: ROOT_ENV_FILE,
+      ignoreEnvFile: IS_TEST_RUN,
+      validate: validateEnv,
+    }),
     LoggerModule.forRootAsync({
       providers: [{ provide: LOG_DESTINATION, useValue: process.stdout }],
       inject: [ConfigService, LOG_DESTINATION],

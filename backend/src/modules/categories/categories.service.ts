@@ -22,4 +22,8 @@ export class CategoriesService {
   ensureDefaults(): Promise<void> {
     return this.categoriesRepository.ensureDefaults(DEFAULT_CATEGORY_NAMES);
   }
+
+  deactivate(categoryId: string): Promise<void> {
+    return this.categoriesRepository.deactivate(categoryId);
+  }
 }

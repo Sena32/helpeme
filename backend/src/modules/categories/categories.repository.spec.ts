@@ -73,4 +73,14 @@ describe('CategoriesRepository', () => {
       isDefault: true,
     });
   });
+
+  it('deactivates a category', async () => {
+    const category = await repository.create('Infra');
+
+    await repository.deactivate(category.id);
+
+    await expect(categoryModel.findById(category.id).lean()).resolves.toMatchObject({
+      isActive: false,
+    });
+  });
 });

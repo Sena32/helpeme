@@ -59,4 +59,8 @@ export class CategoriesRepository {
       })),
     );
   }
+
+  async deactivate(categoryId: string): Promise<void> {
+    await this.categoryModel.updateOne({ _id: categoryId }, { $set: { isActive: false } });
+  }
 }

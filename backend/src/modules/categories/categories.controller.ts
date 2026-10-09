@@ -19,4 +19,10 @@ export class CategoriesController {
   create(@Body() body: CreateCategoryDto): Promise<CategorySummary> {
     return this.categoriesService.create(body.name);
   }
+
+  @Roles(Role.Admin)
+  @Post('deactivate')
+  deactivate(@Body() body: { categoryId: string }): Promise<void> {
+    return this.categoriesService.deactivate(body.categoryId);
+  }
 }
