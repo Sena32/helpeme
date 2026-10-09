@@ -25,9 +25,7 @@ function messageOf(exception: HttpException): ErrorMessage {
   if (typeof response === 'string') return response;
   const { message } = response as { message?: unknown };
   const isMessageList = Array.isArray(message) && message.every((item) => typeof item === 'string');
-  return typeof message === 'string' || isMessageList
-    ? (message)
-    : exception.message;
+  return typeof message === 'string' || isMessageList ? message : exception.message;
 }
 
 function reasonPhrase(statusCode: number): string {
