@@ -79,4 +79,27 @@ describe('UsersRepository', () => {
 
     await expect(repository.create(newUserRecord)).rejects.toBeInstanceOf(ConflictException);
   });
+
+  it('finds credentials by email ignoring case, including the password hash', async () => {
+    const created = await repository.create(newUserRecord);
+
+    const credentials = await repository.findCredentialsByEmail(' MARIA@example.com ');
+
+    expect(credentials).toEqual({ user: created, passwordHash: newUserRecord.passwordHash });
+  });
+
+  it('returns null credentials for an unknown email', async () => {
+    await expect(repository.findCredentialsByEmail('ghost@example.com')).resolves.toBeNull();
+  });
+
+  it('finds a public user by id', async () => {
+    const created = await repository.create(newUserRecord);
+
+    await expect(repository.findById(created.id)).resolves.toEqual(created);
+  });
+
+  it('returns null for an unknown or malformed id', async () => {
+    await expect(repository.findById('64b7f0c2a1b2c3d4e5f60718')).resolves.toBeNull();
+    await expect(repository.findById('not-an-object-id')).resolves.toBeNull();
+  });
 });

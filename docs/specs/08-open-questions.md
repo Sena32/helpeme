@@ -19,3 +19,4 @@ Status: draft · Premissa vale até alguém decidir o contrário.
 | Q-14 | Limite de corpo no nginx para uploads | Default do nginx (1 MB) mantido até T-10; lá definir `client_max_body_size` derivado de `MAX_UPLOAD_SIZE_MB × MAX_FILES_PER_REQUEST` (alterar SPEC-03 se exigir nova env) |
 | Q-15 | Índices com `autoIndex` desligado em produção | Criados explicitamente (`syncIndexes`) no seed/bootstrap da T-08 |
 | Q-16 | Biblioteca de hash | `bcryptjs` (algoritmo bcrypt, sem build nativo no Alpine); custo via `BCRYPT_ROUNDS` |
+| Q-17 | `forbidNonWhitelisted` × AC-04 (`role` no cadastro público) | `RegisterDto` aceita `role` (`@Allow`) e o descarta: 201 como `USER`; demais campos desconhecidos → 400 |

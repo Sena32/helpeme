@@ -17,5 +17,6 @@ export const validEnv: Record<string, string> = {
   LOG_LEVEL: 'silent',
   PAGINATION_MAX_LIMIT: '50',
   THROTTLE_TTL: '60',
-  THROTTLE_LIMIT: '10',
+  // High enough that functional e2e suites never hit the limit; throttling has its own suite.
+  THROTTLE_LIMIT: '1000',
 };

@@ -5,7 +5,7 @@ import { Role } from '../../common/enums/role.enum';
 import { Env } from '../../config/env.schema';
 import { isStrongPassword, WEAK_PASSWORD_MESSAGE } from './password-policy';
 import { EMAIL_ALREADY_REGISTERED_MESSAGE, UsersRepository } from './users.repository';
-import { CreateUserInput, PublicUser } from './users.types';
+import { CreateUserInput, PublicUser, UserCredentials } from './users.types';
 
 @Injectable()
 export class UsersService {
@@ -32,5 +32,13 @@ export class UsersService {
       passwordHash,
       role: input.role ?? Role.User,
     });
+  }
+
+  findCredentialsByEmail(email: string): Promise<UserCredentials | null> {
+    return this.usersRepository.findCredentialsByEmail(email);
+  }
+
+  findById(id: string): Promise<PublicUser | null> {
+    return this.usersRepository.findById(id);
   }
 }

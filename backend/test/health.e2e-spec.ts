@@ -1,25 +1,20 @@
 import { INestApplication } from '@nestjs/common';
-import { Test } from '@nestjs/testing';
 import request from 'supertest';
 import { App } from 'supertest/types';
-import { AppModule } from '../src/app.module';
-import { configureApp } from '../src/app.setup';
+import { createTestApp } from './create-test-app';
 
 describe('GET /api/health', () => {
   let app: INestApplication<App>;
 
   beforeAll(async () => {
-    const moduleRef = await Test.createTestingModule({ imports: [AppModule] }).compile();
-    app = moduleRef.createNestApplication();
-    configureApp(app);
-    await app.init();
+    app = await createTestApp();
   });
 
   afterAll(async () => {
     await app.close();
   });
 
-  it('responds 200 with status ok', async () => {
+  it('responds 200 with status ok without authentication', async () => {
     const response = await request(app.getHttpServer()).get('/api/health');
 
     expect(response.status).toBe(200);

@@ -22,3 +22,8 @@ export interface PublicUser {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface UserCredentials {
+  user: PublicUser;
+  passwordHash: string;
+}
