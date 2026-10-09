@@ -9,6 +9,7 @@ RUN npm run build
 
 FROM nginxinc/nginx-unprivileged:1.27-alpine AS runtime
 COPY --chown=nginx:nginx nginx/default.conf.template /etc/nginx/templates/default.conf.template
+COPY --chmod=755 nginx/15-upload-body-limit.envsh /docker-entrypoint.d/15-upload-body-limit.envsh
 COPY --from=build --chown=nginx:nginx /app/dist /usr/share/nginx/html
 USER nginx
 EXPOSE 8080

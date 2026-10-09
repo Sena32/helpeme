@@ -1,6 +1,7 @@
 import { BadRequestException } from '@nestjs/common';
 import { RequestStatus } from '../../common/enums/request-status.enum';
 import { CategoriesService } from '../categories/categories.service';
+import { AttachmentsService } from './attachments/attachments.service';
 import { CategorySummary } from '../categories/categories.types';
 import { RequestsRepository } from './requests.repository';
 import { INVALID_CATEGORY_MESSAGE, RequestsService } from './requests.service';
@@ -19,9 +20,15 @@ class FakeRequestsRepository implements Pick<RequestsRepository, 'create'> {
 
 function buildService(repository: FakeRequestsRepository, category: CategorySummary | null) {
   const categoriesService = { findActiveById: () => Promise.resolve(category) };
+  const attachmentsService = {
+    prepare: () => [],
+    store: () => Promise.resolve(),
+    discard: () => Promise.resolve(),
+  };
   return new RequestsService(
     repository as unknown as RequestsRepository,
     categoriesService as unknown as CategoriesService,
+    attachmentsService as unknown as AttachmentsService,
   );
 }
 
@@ -45,6 +52,7 @@ describe('RequestsService.create', () => {
       status: RequestStatus.Open,
       priority: null,
       priorityRank: 0,
+      attachments: [],
     });
   });
 

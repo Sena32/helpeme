@@ -16,6 +16,7 @@ export interface NewRequestRecord {
   status: RequestStatus;
   priority: Priority | null;
   priorityRank: number;
+  attachments: Attachment[];
 }
 
 export interface NamedReference {
@@ -34,7 +35,14 @@ export interface RequestDetails {
   adminNote: string | null;
   resolution: string | null;
   resolvedAt: Date | null;
-  attachments: Attachment[];
+  attachments: AttachmentView[];
   createdAt: Date;
   updatedAt: Date;
+}
+
+export type AttachmentView = Omit<Attachment, 'storedName'>;
+
+export interface AttachmentAccess {
+  createdById: string;
+  attachments: Attachment[];
 }

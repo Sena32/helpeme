@@ -57,6 +57,7 @@ describe('RequestsRepository', () => {
     status: RequestStatus.Open,
     priority: null,
     priorityRank: 0,
+    attachments: [],
   });
 
   it('stores requests in the requests collection', () => {

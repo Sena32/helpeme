@@ -40,6 +40,8 @@ services:
     restart: unless-stopped
     environment:
       BACKEND_PORT: ${BACKEND_PORT}
+      MAX_UPLOAD_SIZE_MB: ${MAX_UPLOAD_SIZE_MB}
+      MAX_FILES_PER_REQUEST: ${MAX_FILES_PER_REQUEST}
     ports:
       - "${FRONTEND_PORT}:8080"
     depends_on:

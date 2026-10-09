@@ -1,8 +1,14 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
-import { NewRequestRecord, NamedReference, RequestDetails } from './requests.types';
-import { ServiceRequest } from './schemas/service-request.model';
+import { isValidObjectId, Model, Types } from 'mongoose';
+import {
+  AttachmentAccess,
+  AttachmentView,
+  NamedReference,
+  NewRequestRecord,
+  RequestDetails,
+} from './requests.types';
+import { Attachment, ServiceRequest } from './schemas/service-request.model';
 
 const NAME_ONLY = 'name';
 export const REQUEST_NOT_FOUND_MESSAGE = 'Solicitação não encontrada.';
@@ -18,6 +24,10 @@ function toNamedReference(reference: PopulatedReference): NamedReference {
   return { id: reference._id.toString(), name: reference.name };
 }
 
+function toAttachmentView({ id, originalName, mimeType, sizeBytes }: Attachment): AttachmentView {
+  return { id, originalName, mimeType, sizeBytes };
+}
+
 function toRequestDetails(document: PopulatedRequest): RequestDetails {
   return {
     id: document._id.toString(),
@@ -30,7 +40,7 @@ function toRequestDetails(document: PopulatedRequest): RequestDetails {
     adminNote: document.adminNote,
     resolution: document.resolution,
     resolvedAt: document.resolvedAt,
-    attachments: document.attachments,
+    attachments: document.attachments.map(toAttachmentView),
     createdAt: document.createdAt,
     updatedAt: document.updatedAt,
   };
@@ -49,6 +59,16 @@ export class RequestsRepository {
       createdBy: createdById,
     });
     return this.findDetailsById(created._id);
+  }
+
+  async findAttachmentAccess(requestId: string): Promise<AttachmentAccess | null> {
+    if (!isValidObjectId(requestId)) return null;
+    const document = await this.requestModel
+      .findById(requestId)
+      .select('createdBy attachments')
+      .lean();
+    if (!document) return null;
+    return { createdById: document.createdBy.toString(), attachments: document.attachments };
   }
 
   private async findDetailsById(id: Types.ObjectId): Promise<RequestDetails> {

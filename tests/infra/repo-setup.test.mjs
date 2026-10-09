@@ -106,3 +106,14 @@ test('nginx proxies /api to the backend and falls back to the SPA', () => {
   assert.match(nginxTemplate, /location \/api\/ \{[^}]*proxy_pass http:\/\/backend:\$\{BACKEND_PORT\};/);
   assert.match(nginxTemplate, /try_files \$uri \$uri\/ \/index\.html;/);
 });
+
+test('nginx accepts request bodies sized for the maximum upload (Q-14)', () => {
+  const nginxTemplate = readRepoFile('frontend/nginx/default.conf.template');
+  const limitScript = readRepoFile('frontend/nginx/15-upload-body-limit.envsh');
+
+  assert.match(nginxTemplate, /client_max_body_size \$\{NGINX_CLIENT_MAX_BODY_SIZE\};/);
+  assert.match(limitScript, /MAX_UPLOAD_SIZE_MB \* MAX_FILES_PER_REQUEST/);
+  for (const variable of ['MAX_UPLOAD_SIZE_MB', 'MAX_FILES_PER_REQUEST']) {
+    assert.match(composeServiceBlock('frontend'), new RegExp(`${variable}: \\$\\{${variable}\\}`));
+  }
+});

@@ -1,0 +1,4 @@
+#!/bin/sh
+# Sourced by the nginx entrypoint before templating (Q-14): the request body must fit
+# MAX_FILES_PER_REQUEST files of MAX_UPLOAD_SIZE_MB plus 1 MB for form fields and multipart framing.
+export NGINX_CLIENT_MAX_BODY_SIZE="$((MAX_UPLOAD_SIZE_MB * MAX_FILES_PER_REQUEST + 1))m"
