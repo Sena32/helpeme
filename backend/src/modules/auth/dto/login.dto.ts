@@ -1,8 +1,6 @@
 import { Transform } from 'class-transformer';
 import { IsEmail, IsString, MinLength } from 'class-validator';
-
-const trimIfString = ({ value }: { value: unknown }) =>
-  typeof value === 'string' ? value.trim() : value;
+import { trimIfString } from '../../../common/transformers/trim.transformer';
 
 export class LoginDto {
   @Transform(trimIfString)
@@ -13,5 +11,3 @@ export class LoginDto {
   @MinLength(1, { message: 'Informe a senha.' })
   password!: string;
 }
-
-export { trimIfString };
