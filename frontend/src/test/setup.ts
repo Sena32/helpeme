@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom/vitest';
 import { cleanup } from '@testing-library/react';
+import { toast } from 'sonner';
 import type { JSDOM } from 'jsdom';
 import { afterAll, afterEach, beforeAll, beforeEach, vi } from 'vitest';
 import { mockSystemDarkMode } from './match-media';
@@ -34,6 +35,8 @@ beforeAll(() => mswServer.listen({ onUnhandledRequest: 'error' }));
 beforeEach(() => mockSystemDarkMode(false));
 afterEach(() => {
   cleanup();
+  // Sonner keeps toasts in module state and replays active ones to the next Toaster.
+  toast.dismiss();
   mswServer.resetHandlers();
 });
 afterAll(() => mswServer.close());

@@ -1,5 +1,6 @@
 import { appEnv } from '@/config/env';
 import type {
+  AdminRequestUpdate,
   CreateRequestInput,
   RequestDetails,
   RequestListPage,
@@ -36,4 +37,13 @@ export async function createRequest({
   return (
     await apiRequest<{ request: RequestDetails }>('/requests', { method: 'POST', body: formData })
   ).request;
+}
+
+export async function updateRequest(
+  requestId: string,
+  update: AdminRequestUpdate,
+): Promise<RequestDetails> {
+  const path = `/requests/${encodeURIComponent(requestId)}`;
+  return (await apiRequest<{ request: RequestDetails }>(path, { method: 'PATCH', body: update }))
+    .request;
 }

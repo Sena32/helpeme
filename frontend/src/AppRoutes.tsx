@@ -1,6 +1,7 @@
 import { Route, Routes } from 'react-router';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { AdminDashboardPage } from '@/features/admin/AdminDashboardPage';
+import { AdminRequestPage } from '@/features/admin/AdminRequestPage';
 import { AuthPage } from '@/features/auth/AuthPage';
 import { AuthGuard, RoleGuard } from '@/features/auth/guards';
 import { NewRequestPage } from '@/features/requests/NewRequestPage';
@@ -8,7 +9,7 @@ import { RequestDetailPage } from '@/features/requests/RequestDetailPage';
 import { UserDashboardPage } from '@/features/requests/UserDashboardPage';
 import { ROLES } from '@/types/auth';
 
-// Placeholder pages; real screens arrive in T-20..T-21.
+// Placeholder pages; real screens arrive in T-21.
 function PlaceholderPage({ title }: { title: string }) {
   return <h1 className="text-3xl font-semibold">{title}</h1>;
 }
@@ -26,6 +27,7 @@ export function AppRoutes() {
           </Route>
           <Route element={<RoleGuard allowedRoles={[ROLES.Admin]} />}>
             <Route path="/admin" element={<AdminDashboardPage />} />
+            <Route path="/admin/solicitacoes/:requestId" element={<AdminRequestPage />} />
             <Route path="/admin/categorias" element={<PlaceholderPage title="Categorias" />} />
             <Route path="/admin/usuarios" element={<PlaceholderPage title="Usuários" />} />
           </Route>
