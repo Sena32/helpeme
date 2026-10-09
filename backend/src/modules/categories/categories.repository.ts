@@ -1,6 +1,6 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, mongo } from 'mongoose';
+import { isValidObjectId, Model, mongo } from 'mongoose';
 import { CATEGORY_ALREADY_EXISTS_MESSAGE, CATEGORY_NAME_COLLATION } from './categories.constants';
 import { CategorySummary } from './categories.types';
 import { Category } from './schemas/category.model';
@@ -36,6 +36,15 @@ export class CategoriesRepository {
       .sort({ name: 1 })
       .lean();
     return categories.map(toSummary);
+  }
+
+  async findActiveById(id: string): Promise<CategorySummary | null> {
+    if (!isValidObjectId(id)) return null;
+    const category = await this.categoryModel
+      .findOne({ _id: id, isActive: true })
+      .select('name')
+      .lean();
+    return category ? toSummary(category) : null;
   }
 
   async ensureDefaults(names: readonly string[]): Promise<void> {

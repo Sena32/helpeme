@@ -15,6 +15,10 @@ export class CategoriesService {
     return this.categoriesRepository.findActive();
   }
 
+  findActiveById(id: string): Promise<CategorySummary | null> {
+    return this.categoriesRepository.findActiveById(id);
+  }
+
   ensureDefaults(): Promise<void> {
     return this.categoriesRepository.ensureDefaults(DEFAULT_CATEGORY_NAMES);
   }
