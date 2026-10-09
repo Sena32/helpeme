@@ -2,9 +2,11 @@ import { Route, Routes } from 'react-router';
 import { AppLayout } from '@/components/layout/AppLayout';
 import { AuthPage } from '@/features/auth/AuthPage';
 import { AuthGuard, RoleGuard } from '@/features/auth/guards';
+import { RequestDetailPage } from '@/features/requests/RequestDetailPage';
+import { UserDashboardPage } from '@/features/requests/UserDashboardPage';
 import { ROLES } from '@/types/auth';
 
-// Placeholder pages; real screens arrive in T-17..T-21.
+// Placeholder pages; real screens arrive in T-18..T-21.
 function PlaceholderPage({ title }: { title: string }) {
   return <h1 className="text-3xl font-semibold">{title}</h1>;
 }
@@ -16,11 +18,12 @@ export function AppRoutes() {
       <Route element={<AuthGuard />}>
         <Route element={<AppLayout />}>
           <Route element={<RoleGuard allowedRoles={[ROLES.User]} />}>
-            <Route path="/" element={<PlaceholderPage title="Meu painel" />} />
+            <Route path="/" element={<UserDashboardPage />} />
             <Route
               path="/solicitacoes/nova"
               element={<PlaceholderPage title="Nova solicitação" />}
             />
+            <Route path="/solicitacoes/:requestId" element={<RequestDetailPage />} />
           </Route>
           <Route element={<RoleGuard allowedRoles={[ROLES.Admin]} />}>
             <Route path="/admin" element={<PlaceholderPage title="Painel administrativo" />} />

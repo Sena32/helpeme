@@ -16,6 +16,6 @@ export default defineConfig({
     setupFiles: ['./src/test/setup.ts'],
     // Design-token tests read src/index.css as raw text.
     css: { include: [/index\.css/] },
-    env: { VITE_API_BASE_URL: '/api' },
+    env: { VITE_API_BASE_URL: '/api', TZ: 'America/Sao_Paulo' },
   },
 });

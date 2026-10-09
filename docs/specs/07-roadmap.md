@@ -22,7 +22,7 @@ Status: ready · Marque `[x]` ao concluir. Cada tarefa lista as specs a ler.
 ## Fase 2 — Frontend
 - [x] **T-15** Camada `api/` + client + env + tipos + hooks de auth; `AuthGuard`/`RoleGuard`. · Ler: 05, AC-28/29
 - [x] **T-16** Layout (sidebar/topbar/tema) + tela Login/Cadastro. · Ler: UI-01
-- [ ] **T-17** Dashboard User + lista + detalhe leitura. · Ler: UI-06/08
+- [x] **T-17** Dashboard User + lista + detalhe leitura. · Ler: UI-06/08
 - [ ] **T-18** Nova solicitação com upload e validações. · Ler: UI-07, AC-11..14
 - [ ] **T-19** Dashboard Admin: KPIs + tabela ordenável/filtrável/paginada. · Ler: UI-02
 - [ ] **T-20** Tratamento admin (prioridade, status, observação, finalizar). · Ler: UI-03
