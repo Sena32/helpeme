@@ -1,0 +1,6 @@
+# Local development only: exposes Mongo to the host (loopback) so backend/frontend can run with Node.
+# Usage: docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d mongo
+services:
+  mongo:
+    ports:
+      - "127.0.0.1:27017:27017"

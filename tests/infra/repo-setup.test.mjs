@@ -117,3 +117,36 @@ test('nginx accepts request bodies sized for the maximum upload (Q-14)', () => {
     assert.match(composeServiceBlock('frontend'), new RegExp(`${variable}: \\$\\{${variable}\\}`));
   }
 });
+
+test('README covers every section required by rules 06, without leftovers', () => {
+  const readme = readRepoFile('README.md');
+  const requiredSections = [
+    'Como instalar',
+    'Como executar',
+    'Variáveis de ambiente',
+    'Usuários para teste',
+    'Solução',
+    'Principais decisões',
+  ];
+
+  for (const section of requiredSections) assert.match(readme, new RegExp(`^## ${section}`, 'm'), section);
+  assert.match(readme, /### Com Docker/);
+  assert.match(readme, /### Local/);
+  assert.doesNotMatch(readme, /TODO|Template do README/);
+});
+
+test('README documents every variable of .env.example', () => {
+  const readme = readRepoFile('README.md');
+  const missing = [...declaredEnvNames()].filter((name) => !readme.includes(`\`${name}\``));
+
+  assert.deepEqual(missing, []);
+});
+
+test('README lists the seeded test credentials from .env.example', () => {
+  const readme = readRepoFile('README.md');
+  const exampleValue = (name) => readRepoFile('.env.example').match(new RegExp(`^${name}=(.*)$`, 'm'))?.[1];
+
+  for (const name of ['ADMIN_ROOT_EMAIL', 'ADMIN_ROOT_PASSWORD', 'SEED_USER_EMAIL', 'SEED_USER_PASSWORD']) {
+    assert.ok(readme.includes(exampleValue(name)), name);
+  }
+});
