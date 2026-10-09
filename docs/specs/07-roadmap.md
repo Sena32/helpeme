@@ -20,7 +20,7 @@ Status: ready · Marque `[x]` ao concluir. Cada tarefa lista as specs a ler.
 - [x] **T-14** Middleware de log estruturado + filtro global de erros. · Ler: AC-31
 
 ## Fase 2 — Frontend
-- [ ] **T-15** Camada `api/` + client + env + tipos + hooks de auth; `AuthGuard`/`RoleGuard`. · Ler: 05, AC-28/29
+- [x] **T-15** Camada `api/` + client + env + tipos + hooks de auth; `AuthGuard`/`RoleGuard`. · Ler: 05, AC-28/29
 - [ ] **T-16** Layout (sidebar/topbar/tema) + tela Login/Cadastro. · Ler: UI-01
 - [ ] **T-17** Dashboard User + lista + detalhe leitura. · Ler: UI-06/08
 - [ ] **T-18** Nova solicitação com upload e validações. · Ler: UI-07, AC-11..14
