@@ -6,7 +6,9 @@ import { validateEnv } from './config/env.schema';
 import { buildLoggerParams } from './config/logger.config';
 import { buildThrottlerOptions } from './config/throttler.config';
 import { AuthModule } from './modules/auth/auth.module';
+import { CategoriesModule } from './modules/categories/categories.module';
 import { DatabaseModule } from './database/database.module';
+import { SeedModule } from './database/seeds/seed.module';
 import { HealthModule } from './modules/health/health.module';
 import { UsersModule } from './modules/users/users.module';
 
@@ -22,6 +24,8 @@ const ROOT_ENV_FILE = '../.env';
     AuthModule,
     HealthModule,
     UsersModule,
+    CategoriesModule,
+    SeedModule,
   ],
 })
 export class AppModule {}

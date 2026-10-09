@@ -16,4 +16,9 @@ export default tseslint.config(
       '@typescript-eslint/no-unused-vars': ['error', { varsIgnorePattern: '^_' }],
     },
   },
+  {
+    // Jest asymmetric matchers (expect.any, objectContaining…) are typed as `any` by @types/jest.
+    files: ['**/*.spec.ts', 'test/**/*.ts'],
+    rules: { '@typescript-eslint/no-unsafe-assignment': 'off' },
+  },
 );
