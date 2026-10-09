@@ -1,7 +1,10 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { APP_FILTER } from '@nestjs/core';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { LoggerModule } from 'nestjs-pino';
+import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
+import { LOG_DESTINATION } from './common/logging/log-destination';
 import { validateEnv } from './config/env.schema';
 import { buildLoggerParams } from './config/logger.config';
 import { buildThrottlerOptions } from './config/throttler.config';
@@ -20,7 +23,11 @@ const ROOT_ENV_FILE = '../.env';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, envFilePath: ROOT_ENV_FILE, validate: validateEnv }),
-    LoggerModule.forRootAsync({ inject: [ConfigService], useFactory: buildLoggerParams }),
+    LoggerModule.forRootAsync({
+      providers: [{ provide: LOG_DESTINATION, useValue: process.stdout }],
+      inject: [ConfigService, LOG_DESTINATION],
+      useFactory: buildLoggerParams,
+    }),
     ThrottlerModule.forRootAsync({ inject: [ConfigService], useFactory: buildThrottlerOptions }),
     DatabaseModule,
     AuthModule,
@@ -31,5 +38,6 @@ const ROOT_ENV_FILE = '../.env';
     DashboardModule,
     SeedModule,
   ],
+  providers: [{ provide: APP_FILTER, useClass: AllExceptionsFilter }],
 })
 export class AppModule {}

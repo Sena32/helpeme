@@ -17,7 +17,7 @@ Status: ready · Marque `[x]` ao concluir. Cada tarefa lista as specs a ler.
 - [x] **T-11** Listagem com escopo por role, paginação, ordenação data/prioridade, filtros. · Ler: AC-15..18
 - [x] **T-12** Tratamento admin: prioridade, status, observação, resolução, transições. · Ler: AC-19..23
 - [x] **T-13** Dashboard summary (aggregate). · Ler: AC-26/27
-- [ ] **T-14** Middleware de log estruturado + filtro global de erros. · Ler: AC-31
+- [x] **T-14** Middleware de log estruturado + filtro global de erros. · Ler: AC-31
 
 ## Fase 2 — Frontend
 - [ ] **T-15** Camada `api/` + client + env + tipos + hooks de auth; `AuthGuard`/`RoleGuard`. · Ler: 05, AC-28/29
