@@ -5,7 +5,7 @@ Status: ready · Marque `[x]` ao concluir. Cada tarefa lista as specs a ler.
 - [x] **T-01** Repo, `.gitignore`, `.env.example`, `docker-compose.yml`, README base, adicionar colaborador `ednaldotaurino`. · Ler: 03
 - [x] **T-02** Scaffold backend NestJS (strict, ESLint sem `any`, Jest, config/env validada, `/health`, logger pino). · Ler: 03, rules 04
 - [x] **T-03** Scaffold frontend Vite+TS, Tailwind, shadcn init, Vitest, tokens/dark mode, logo. · Ler: 06
-- [ ] **T-04** Dockerfiles + compose funcional (mongo/backend/frontend). · Ler: 03
+- [x] **T-04** Dockerfiles + compose funcional (mongo/backend/frontend). · Ler: 03
 
 ## Fase 1 — Backend
 - [ ] **T-05** Users: model, repository, service, política de senha. · Ler: 04, RN-01/02
