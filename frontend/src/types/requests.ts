@@ -73,3 +73,10 @@ export interface AdminRequestUpdate {
   adminNote?: string;
   resolution?: string;
 }
+
+export interface CreateRequestInput {
+  title: string;
+  categoryId: string;
+  description: string;
+  files: File[];
+}
