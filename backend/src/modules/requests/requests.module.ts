@@ -31,6 +31,7 @@ const BYTES_PER_MEGABYTE = 1024 * 1024;
     CategoriesModule,
   ],
   controllers: [RequestsController],
+  exports: [RequestsService],
   providers: [
     RequestsRepository,
     RequestsService,

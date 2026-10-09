@@ -7,6 +7,7 @@ import { buildLoggerParams } from './config/logger.config';
 import { buildThrottlerOptions } from './config/throttler.config';
 import { AuthModule } from './modules/auth/auth.module';
 import { CategoriesModule } from './modules/categories/categories.module';
+import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { RequestsModule } from './modules/requests/requests.module';
 import { DatabaseModule } from './database/database.module';
 import { SeedModule } from './database/seeds/seed.module';
@@ -27,6 +28,7 @@ const ROOT_ENV_FILE = '../.env';
     UsersModule,
     CategoriesModule,
     RequestsModule,
+    DashboardModule,
     SeedModule,
   ],
 })
