@@ -1,4 +1,12 @@
-import { useCallback, useEffect, useState } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from 'react';
 import {
   DARK_COLOR_SCHEME_QUERY,
   DARK_THEME_CLASS,
@@ -8,6 +16,14 @@ import {
   type ResolvedTheme,
   type ThemePreference,
 } from '@/lib/theme';
+
+interface ThemeContextValue {
+  theme: ThemePreference;
+  resolvedTheme: ResolvedTheme;
+  setTheme: (preference: ThemePreference) => void;
+}
+
+const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 function readStoredPreference(): ThemePreference {
   try {
@@ -40,11 +56,7 @@ function useSystemPrefersDark(): boolean {
   return prefersDark;
 }
 
-export function useTheme(): {
-  theme: ThemePreference;
-  resolvedTheme: ResolvedTheme;
-  setTheme: (preference: ThemePreference) => void;
-} {
+export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setThemeState] = useState<ThemePreference>(readStoredPreference);
   const resolvedTheme = resolveTheme(theme, useSystemPrefersDark());
 
@@ -57,5 +69,15 @@ export function useTheme(): {
     setThemeState(preference);
   }, []);
 
-  return { theme, resolvedTheme, setTheme };
+  const value = useMemo(
+    () => ({ theme, resolvedTheme, setTheme }),
+    [theme, resolvedTheme, setTheme],
+  );
+  return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
+}
+
+export function useTheme(): ThemeContextValue {
+  const context = useContext(ThemeContext);
+  if (!context) throw new Error('useTheme must be used within ThemeProvider');
+  return context;
 }

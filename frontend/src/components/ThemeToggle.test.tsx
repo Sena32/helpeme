@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { mockSystemDarkMode } from '@/test/match-media';
+import { ThemeProvider } from '@/hooks/useTheme';
 import { ThemeToggle } from './ThemeToggle';
 
 describe('ThemeToggle', () => {
@@ -11,7 +12,7 @@ describe('ThemeToggle', () => {
   });
 
   it('switches from light to dark mode on click', async () => {
-    render(<ThemeToggle />);
+    render(<ThemeToggle />, { wrapper: ThemeProvider });
 
     await userEvent.click(screen.getByRole('button', { name: 'Ativar tema escuro' }));
 

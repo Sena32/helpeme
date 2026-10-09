@@ -2,9 +2,9 @@ import { Navigate, Outlet, useLocation } from 'react-router';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useCurrentUser } from '@/hooks/useAuth';
 import type { Role } from '@/types/auth';
+import { homePathFor } from './home-path';
 
 export const LOGIN_PATH = '/login';
-export const HOME_PATH = '/';
 
 function SessionCheck() {
   return (
@@ -33,6 +33,7 @@ export function AuthGuard() {
 export function RoleGuard({ allowedRoles }: { allowedRoles: readonly Role[] }) {
   const { user } = useCurrentUser();
 
-  if (!user || !allowedRoles.includes(user.role)) return <Navigate to={HOME_PATH} replace />;
+  if (!user) return <Navigate to={LOGIN_PATH} replace />;
+  if (!allowedRoles.includes(user.role)) return <Navigate to={homePathFor(user.role)} replace />;
   return <Outlet />;
 }
