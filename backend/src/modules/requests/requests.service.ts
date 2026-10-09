@@ -1,6 +1,13 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  ConflictException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Readable } from 'node:stream';
+import { Clock, CLOCK } from '../../common/clock';
 import { UNSET_PRIORITY_RANK } from '../../common/enums/priority.enum';
 import { RequestStatus } from '../../common/enums/request-status.enum';
 import { Role } from '../../common/enums/role.enum';
@@ -9,6 +16,7 @@ import { Env } from '../../config/env.schema';
 import { CategoriesService } from '../categories/categories.service';
 import { AttachmentsService, UploadedImage } from './attachments/attachments.service';
 import { buildRequestFilter, buildRequestSort, ListRequestsQuery } from './request-list-query';
+import { AdminRequestPatch, planRequestUpdate } from './request-update-plan';
 import { REQUEST_NOT_FOUND_MESSAGE, RequestsRepository } from './requests.repository';
 import { CreateRequestInput, RequestDetails, RequestListPage } from './requests.types';
 import { Attachment } from './schemas/service-request.model';
@@ -16,6 +24,8 @@ import { Attachment } from './schemas/service-request.model';
 export const INVALID_CATEGORY_MESSAGE = 'Categoria inexistente ou inativa.';
 export const ATTACHMENT_NOT_FOUND_MESSAGE = 'Anexo não encontrado.';
 export const DEFAULT_PAGE_SIZE = 10;
+export const CONCURRENT_UPDATE_MESSAGE =
+  'A solicitação foi alterada por outra pessoa. Recarregue e tente novamente.';
 const FIRST_PAGE = 1;
 
 function canAccess(ownerId: string, viewer: AuthenticatedUser): boolean {
@@ -29,6 +39,7 @@ export class RequestsService {
     private readonly categoriesService: CategoriesService,
     private readonly attachmentsService: AttachmentsService,
     private readonly config: ConfigService<Env, true>,
+    @Inject(CLOCK) private readonly clock: Clock,
   ) {}
 
   async create(
@@ -84,6 +95,24 @@ export class RequestsService {
       throw new NotFoundException(REQUEST_NOT_FOUND_MESSAGE);
     }
     return details;
+  }
+
+  // RF-09..11 with RN-07..09 rules; the caller is guaranteed to be an admin by RolesGuard.
+  async updateByAdmin(
+    requestId: string,
+    patch: AdminRequestPatch,
+    admin: AuthenticatedUser,
+  ): Promise<RequestDetails> {
+    const currentStatus = await this.requestsRepository.findStatusById(requestId);
+    if (!currentStatus) throw new NotFoundException(REQUEST_NOT_FOUND_MESSAGE);
+
+    const update = planRequestUpdate(currentStatus, patch, {
+      adminId: admin.id,
+      now: this.clock(),
+    });
+    const updated = await this.requestsRepository.applyUpdate(requestId, currentStatus, update);
+    if (!updated) throw new ConflictException(CONCURRENT_UPDATE_MESSAGE);
+    return updated;
   }
 
   // RF-14: anyone other than the owner or an admin gets 404, hiding the attachment's existence.

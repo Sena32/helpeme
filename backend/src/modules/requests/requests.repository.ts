@@ -10,6 +10,8 @@ import {
   RequestListItem,
 } from './requests.types';
 import { RequestFilter, RequestSort } from './request-list-query';
+import { RequestUpdate } from './request-update-plan';
+import { RequestStatus } from '../../common/enums/request-status.enum';
 import { Attachment, ServiceRequest } from './schemas/service-request.model';
 
 const NAME_ONLY = 'name';
@@ -112,6 +114,29 @@ export class RequestsRepository {
       .lean();
     if (!document) return null;
     return { createdById: document.createdBy.toString(), attachments: document.attachments };
+  }
+
+  async findStatusById(id: string): Promise<RequestStatus | null> {
+    if (!isValidObjectId(id)) return null;
+    const document = await this.requestModel.findById(id).select('status').lean();
+    return document?.status ?? null;
+  }
+
+  // Atomic: only applies if nobody changed the status since it was read (returns null otherwise).
+  async applyUpdate(
+    id: string,
+    expectedStatus: RequestStatus,
+    update: RequestUpdate,
+  ): Promise<RequestDetails | null> {
+    const updated = await this.requestModel
+      .findOneAndUpdate(
+        { _id: id, status: expectedStatus },
+        { $set: update },
+        { runValidators: true },
+      )
+      .select('_id')
+      .lean();
+    return updated ? this.findDetailsById(id) : null;
   }
 
   async findDetailsById(id: string): Promise<RequestDetails | null> {

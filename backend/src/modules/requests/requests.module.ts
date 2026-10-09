@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { MulterModule } from '@nestjs/platform-express';
+import { CLOCK, systemClock } from '../../common/clock';
 import { Env } from '../../config/env.schema';
 import { CategoriesModule } from '../categories/categories.module';
 import { ATTACHMENT_STORAGE } from './attachments/attachment-storage';
@@ -34,6 +35,7 @@ const BYTES_PER_MEGABYTE = 1024 * 1024;
     RequestsRepository,
     RequestsService,
     AttachmentsService,
+    { provide: CLOCK, useValue: systemClock },
     {
       provide: ATTACHMENT_STORAGE,
       inject: [ConfigService],

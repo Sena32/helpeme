@@ -1,7 +1,8 @@
-import { BadRequestException } from '@nestjs/common';
+import { BadRequestException, ConflictException, NotFoundException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Env } from '../../config/env.schema';
 import { RequestStatus } from '../../common/enums/request-status.enum';
+import { Role } from '../../common/enums/role.enum';
 import { CategoriesService } from '../categories/categories.service';
 import { AttachmentsService } from './attachments/attachments.service';
 import { CategorySummary } from '../categories/categories.types';
@@ -32,6 +33,7 @@ function buildService(repository: FakeRequestsRepository, category: CategorySumm
     categoriesService as unknown as CategoriesService,
     attachmentsService as unknown as AttachmentsService,
     { get: () => 50 } as unknown as ConfigService<Env, true>,
+    () => new Date('2026-03-10T12:00:00.000Z'),
   );
 }
 
@@ -66,5 +68,57 @@ describe('RequestsService.create', () => {
       new BadRequestException(INVALID_CATEGORY_MESSAGE),
     );
     expect(repository.created).toHaveLength(0);
+  });
+});
+
+describe('RequestsService.updateByAdmin', () => {
+  const admin = { id: 'admin-id', role: Role.Admin };
+
+  function serviceWith(repository: object): RequestsService {
+    return new RequestsService(
+      repository as unknown as RequestsRepository,
+      {} as unknown as CategoriesService,
+      {} as unknown as AttachmentsService,
+      { get: () => 50 } as unknown as ConfigService<Env, true>,
+      () => new Date('2026-03-10T12:00:00.000Z'),
+    );
+  }
+
+  it('returns 404 when the request does not exist', async () => {
+    const service = serviceWith({ findStatusById: () => Promise.resolve(null) });
+
+    await expect(
+      service.updateByAdmin('missing', { status: RequestStatus.InProgress }, admin),
+    ).rejects.toBeInstanceOf(NotFoundException);
+  });
+
+  it('returns 409 when the status changed concurrently between read and write', async () => {
+    const service = serviceWith({
+      findStatusById: () => Promise.resolve(RequestStatus.Open),
+      applyUpdate: () => Promise.resolve(null),
+    });
+
+    await expect(
+      service.updateByAdmin('request-id', { status: RequestStatus.InProgress }, admin),
+    ).rejects.toBeInstanceOf(ConflictException);
+  });
+
+  it('stamps resolvedAt with the injected clock', async () => {
+    let appliedUpdate: unknown;
+    const service = serviceWith({
+      findStatusById: () => Promise.resolve(RequestStatus.InProgress),
+      applyUpdate: (_id: string, _status: RequestStatus, update: unknown) => {
+        appliedUpdate = update;
+        return Promise.resolve({ id: 'request-id' });
+      },
+    });
+
+    await service.updateByAdmin(
+      'request-id',
+      { status: RequestStatus.Resolved, resolution: 'Ok' },
+      admin,
+    );
+
+    expect(appliedUpdate).toMatchObject({ resolvedAt: new Date('2026-03-10T12:00:00.000Z') });
   });
 });
