@@ -32,7 +32,7 @@ cd backend && npm install && npm run start:dev
 # frontend (outro terminal)
 cd frontend && npm install && npm run dev
 ```
-Testes: `npm test` em `backend/` e em `frontend/`.
+Testes: `npm test` em `backend/` e em `frontend/`; setup do repositório: `node --test tests/infra/repo-setup.test.mjs`.
 
 ## Variáveis de ambiente
 Veja `.env.example` (todas obrigatórias, exceto as marcadas como opcionais). TODO: tabela resumida com descrição de cada variável.
