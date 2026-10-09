@@ -24,7 +24,7 @@ Status: ready · Marque `[x]` ao concluir. Cada tarefa lista as specs a ler.
 - [x] **T-16** Layout (sidebar/topbar/tema) + tela Login/Cadastro. · Ler: UI-01
 - [x] **T-17** Dashboard User + lista + detalhe leitura. · Ler: UI-06/08
 - [x] **T-18** Nova solicitação com upload e validações. · Ler: UI-07, AC-11..14
-- [ ] **T-19** Dashboard Admin: KPIs + tabela ordenável/filtrável/paginada. · Ler: UI-02
+- [x] **T-19** Dashboard Admin: KPIs + tabela ordenável/filtrável/paginada. · Ler: UI-02
 - [ ] **T-20** Tratamento admin (prioridade, status, observação, finalizar). · Ler: UI-03
 - [ ] **T-21** Categorias e Usuários (admin). · Ler: UI-04/05
 

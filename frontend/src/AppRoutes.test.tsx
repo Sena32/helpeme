@@ -35,7 +35,12 @@ describe('AppRoutes', () => {
 
 describe('AppRoutes for admins', () => {
   it('sends an admin from / to /admin', async () => {
-    mswServer.use(http.get(apiUrl('/auth/me'), () => HttpResponse.json({ user: adminUser })));
+    mswServer.use(
+      http.get(apiUrl('/auth/me'), () => HttpResponse.json({ user: adminUser })),
+      http.get(apiUrl('/dashboard/summary'), () => HttpResponse.json(summary())),
+      http.get(apiUrl('/requests'), () => HttpResponse.json(listPage([]))),
+      http.get(apiUrl('/categories'), () => HttpResponse.json([])),
+    );
 
     renderWithProviders(<AppRoutes />, { route: '/' });
 

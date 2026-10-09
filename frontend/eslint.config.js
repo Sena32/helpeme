@@ -16,6 +16,8 @@ export default tseslint.config(
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/ban-ts-comment': 'error',
       'no-console': 'error',
+      // Lets `{ omitted, ...rest }` drop keys without placeholder names.
+      '@typescript-eslint/no-unused-vars': ['error', { ignoreRestSiblings: true }],
     },
   },
 );
