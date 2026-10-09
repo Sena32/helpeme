@@ -35,3 +35,4 @@ Status: ready · Nomeie cada teste com o `AC-xx`.
 | AC-30 | anexo de outro user | user baixa | 404/403; admin → 200 | RF-14 |
 | AC-31 | requisição qualquer | log gerado | JSON com `requestId` sem senha/token | RNF-04 |
 | AC-32 | tema escuro | renderiza telas | tokens aplicados, sem cores fixas, contraste AA | RNF-05 |
+| AC-33 | banco vazio e `SEED_USER_*` definidas | executa seed duas vezes | 1 usuário `USER` de teste (login funciona), sem duplicar; sem as variáveis, nenhum usuário de teste | RF-04 |

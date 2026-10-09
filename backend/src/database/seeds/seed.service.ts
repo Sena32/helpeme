@@ -7,6 +7,12 @@ import { Env } from '../../config/env.schema';
 import { CategoriesService } from '../../modules/categories/categories.service';
 import { UsersService } from '../../modules/users/users.service';
 
+interface SeedAccount {
+  name: string;
+  email: string;
+  password: string;
+}
+
 @Injectable()
 export class SeedService implements OnApplicationBootstrap {
   private readonly logger = new Logger(SeedService.name);
@@ -29,20 +35,32 @@ export class SeedService implements OnApplicationBootstrap {
   }
 
   async run(): Promise<void> {
-    await this.ensureAdminRoot();
+    await this.ensureUser(this.adminRootAccount(), Role.Admin);
+    const testUser = this.testUserAccount();
+    if (testUser) await this.ensureUser(testUser, Role.User);
     await this.categoriesService.ensureDefaults();
-    this.logger.log('Seed applied (admin root and default categories).');
+    this.logger.log('Seed applied (admin root, test user when configured, default categories).');
   }
 
-  private async ensureAdminRoot(): Promise<void> {
-    const email = this.config.get('ADMIN_ROOT_EMAIL', { infer: true });
-    if (await this.usersService.findCredentialsByEmail(email)) return;
-
-    await this.usersService.create({
+  private adminRootAccount(): SeedAccount {
+    return {
       name: this.config.get('ADMIN_ROOT_NAME', { infer: true }),
-      email,
+      email: this.config.get('ADMIN_ROOT_EMAIL', { infer: true }),
       password: this.config.get('ADMIN_ROOT_PASSWORD', { infer: true }),
-      role: Role.Admin,
-    });
+    };
+  }
+
+  // Optional (AC-33): env validation guarantees the three variables come together.
+  private testUserAccount(): SeedAccount | null {
+    const name = this.config.get('SEED_USER_NAME', { infer: true });
+    const email = this.config.get('SEED_USER_EMAIL', { infer: true });
+    const password = this.config.get('SEED_USER_PASSWORD', { infer: true });
+    return name && email && password ? { name, email, password } : null;
+  }
+
+  // Idempotent: an existing account with the same email is left untouched.
+  private async ensureUser(account: SeedAccount, role: Role): Promise<void> {
+    if (await this.usersService.findCredentialsByEmail(account.email)) return;
+    await this.usersService.create({ ...account, role });
   }
 }

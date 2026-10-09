@@ -24,4 +24,27 @@ describe('validateEnv', () => {
   it('rejects a non-numeric port', () => {
     expect(() => validateEnv({ ...validEnv, BACKEND_PORT: 'abc' })).toThrow(/BACKEND_PORT/);
   });
+
+  it('treats the test user seed variables as optional', () => {
+    const {
+      SEED_USER_NAME: _name,
+      SEED_USER_EMAIL: _email,
+      SEED_USER_PASSWORD: _password,
+      ...withoutSeedUser
+    } = validEnv;
+
+    expect(validateEnv(withoutSeedUser).SEED_USER_EMAIL).toBeUndefined();
+  });
+
+  it('rejects a partially configured test user seed', () => {
+    const { SEED_USER_PASSWORD: _password, ...partial } = validEnv;
+
+    expect(() => validateEnv(partial)).toThrow(/SEED_USER/);
+  });
+
+  it('rejects an invalid test user email', () => {
+    expect(() => validateEnv({ ...validEnv, SEED_USER_EMAIL: 'invalido' })).toThrow(
+      /SEED_USER_EMAIL/,
+    );
+  });
 });

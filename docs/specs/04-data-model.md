@@ -50,7 +50,7 @@ enum Priority { High = 'HIGH', Medium = 'MEDIUM', Low = 'LOW' }
 `{ id: string(uuid), originalName: string, storedName: string, mimeType: 'image/jpeg'|'image/png', sizeBytes: number }`
 
 ## Seed
-Categorias: Infra, Desenvolvimento, RH, Suporte Técnico, Outros (`isDefault: true`). Admin root: `ADMIN_ROOT_NAME/EMAIL/PASSWORD` do env (valores do desafio no `.env.example`).
+Categorias: Infra, Desenvolvimento, RH, Suporte Técnico, Outros (`isDefault: true`). Admin root: `ADMIN_ROOT_NAME/EMAIL/PASSWORD` do env (valores do desafio no `.env.example`). Usuário de teste (`USER`, opcional): `SEED_USER_NAME/EMAIL/PASSWORD` do env.
 
 ## Índices
 Ver tabela em `.claude/rules/05-mongodb.md` (não duplicar aqui).

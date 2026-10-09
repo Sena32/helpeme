@@ -47,6 +47,20 @@ describe('SeedService', () => {
     expect(categories.every((category) => category.isDefault)).toBe(true);
   });
 
+  it('AC-33: seeds the configured test USER once, able to log in', async () => {
+    await seedService.run();
+
+    const testUsers = await userModel
+      .find({ email: validEnv.SEED_USER_EMAIL })
+      .select('+passwordHash')
+      .lean();
+    expect(testUsers).toHaveLength(1);
+    expect(testUsers[0]).toMatchObject({ name: validEnv.SEED_USER_NAME, role: Role.User });
+    await expect(compare(validEnv.SEED_USER_PASSWORD, testUsers[0].passwordHash)).resolves.toBe(
+      true,
+    );
+  });
+
   it('creates the unique indexes explicitly (autoIndex is off in production)', async () => {
     await seedService.ensureIndexes();
 

@@ -7,7 +7,7 @@ Status: ready
 | RF-01 | Cadastro público de usuário (nome, e-mail, senha) na tela de login; role sempre `USER`. |
 | RF-02 | Login por e-mail e senha; retorna sessão autenticada. |
 | RF-03 | Somente admin autenticado pode criar usuário com role `ADMIN`. |
-| RF-04 | Seed cria admin root a partir de env e as 5 categorias padrão (idempotente). |
+| RF-04 | Seed cria admin root a partir de env, as 5 categorias padrão e, se configurado, um usuário de teste (`USER`) a partir de env (idempotente). |
 | RF-05 | User cria solicitação: título, categoria, descrição (50–1000), 0..5 anexos JPG/PNG ≤ 5 MB cada. |
 | RF-06 | User vê dashboard e lista com **apenas suas** solicitações, somente leitura (detalhe incluso). |
 | RF-07 | Admin vê dashboard com métricas globais e **todas** as solicitações. |

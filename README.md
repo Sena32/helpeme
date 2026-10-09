@@ -41,7 +41,8 @@ Veja `.env.example` (todas obrigatórias, exceto as marcadas como opcionais). TO
 | Perfil | E-mail | Senha |
 |---|---|---|
 | Admin (seed) | admin@admin.com | Admin123@ |
-| User | cadastre-se na tela de login | — |
+| User (seed) | user@test.com | User123@ |
+| User | ou cadastre-se na tela de login | — |
 
 ## Solução (resumo)
 TODO: 5–8 linhas — fluxo user/admin, dashboards, upload, categorias, priorização.
