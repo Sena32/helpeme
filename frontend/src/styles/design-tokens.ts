@@ -34,3 +34,17 @@ export function contrastRatio(firstHex: string, secondHex: string): number {
   );
   return (lighter + CONTRAST_OFFSET) / (darker + CONTRAST_OFFSET);
 }
+
+function toHexChannel(value: number): string {
+  return Math.round(value).toString(16).padStart(2, '0').toUpperCase();
+}
+
+// Flattens a translucent colour (e.g. Tailwind `bg-primary/10`) over an opaque surface.
+export function blendOver(colorHex: string, surfaceHex: string, opacity: number): string {
+  const mixed = HEX_CHANNELS.map((start) => {
+    const color = parseInt(colorHex.slice(start, start + 2), 16);
+    const surface = parseInt(surfaceHex.slice(start, start + 2), 16);
+    return toHexChannel(color * opacity + surface * (1 - opacity));
+  });
+  return `#${mixed.join('')}`;
+}

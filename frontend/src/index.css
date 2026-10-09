@@ -29,6 +29,7 @@
   --border: #e2e8f0;
   --input: #e2e8f0;
   --ring: #4f46e5;
+  --overlay: #0f172a;
 }
 
 .dark {
@@ -55,6 +56,7 @@
   --border: #243049;
   --input: #243049;
   --ring: #a5b4fc;
+  --overlay: #000000;
 }
 
 @theme inline {
@@ -86,6 +88,7 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-overlay: var(--overlay);
 }
 
 @layer base {

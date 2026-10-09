@@ -1,5 +1,5 @@
 import stylesheet from '../index.css?raw';
-import { contrastRatio, readThemeTokens } from './design-tokens';
+import { blendOver, contrastRatio, readThemeTokens } from './design-tokens';
 
 const SPEC_06_TOKENS = {
   light: {
@@ -72,5 +72,34 @@ describe.each(['light', 'dark'] as const)('%s theme tokens', (themeName) => {
 describe('contrastRatio', () => {
   it('returns 21 for black on white', () => {
     expect(contrastRatio('#000000', '#FFFFFF')).toBeCloseTo(21);
+  });
+});
+
+// Tone text over a 10% tint of itself (active nav, avatar, inline alerts). warning/success tints
+// fall to ~4.2:1 in light mode, so their badges are outlined instead (guarded in no-hardcoded-colors).
+const TINT_OPACITY = 0.1;
+const TINTED_TONES = ['primary', 'destructive'] as const;
+const SURFACES = ['card', 'background'] as const;
+
+describe.each(['light', 'dark'] as const)('%s tinted badges', (themeName) => {
+  const tokens = readThemeTokens(stylesheet, themeName);
+
+  it.each(TINTED_TONES.flatMap((tone) => SURFACES.map((surface) => [tone, surface] as const)))(
+    '%s text on a 10 percent tint over %s meets AA',
+    (tone, surface) => {
+      const tint = blendOver(tokens[tone], tokens[surface], TINT_OPACITY);
+
+      expect(contrastRatio(tokens[tone], tint)).toBeGreaterThanOrEqual(NORMAL_TEXT_MIN_CONTRAST);
+    },
+  );
+
+  it('defines an overlay token for modal scrims', () => {
+    expect(tokens.overlay).toMatch(/^#[0-9A-Fa-f]{6}$/);
+  });
+});
+
+describe('blendOver', () => {
+  it('mixes a colour over a surface by opacity', () => {
+    expect(blendOver('#000000', '#FFFFFF', 0.5)).toBe('#808080');
   });
 });

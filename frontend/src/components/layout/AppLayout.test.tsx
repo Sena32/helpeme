@@ -52,7 +52,7 @@ describe('AppLayout', () => {
   it('offers the theme toggle in the top bar', async () => {
     renderLayoutAs(regularUser);
 
-    expect(await screen.findByRole('button', { name: 'Ativar tema escuro' })).toBeInTheDocument();
+    expect(await screen.findByRole('button', { name: 'Tema: Sistema' })).toBeInTheDocument();
   });
 
   it('collapses the sidebar keeping links reachable by name', async () => {
