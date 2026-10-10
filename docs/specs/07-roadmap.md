@@ -45,7 +45,7 @@ Status: ready · Marque `[x]` ao concluir. Cada tarefa lista as specs a ler.
 - [x] **T-32** "Finalizar" como modal acionado por botão em destaque no canto superior direito (só em "Em resolução"); hover discreto nos menus suspensos. · Ler: UI-03, 06 (Hover discreto), AC-41
 - [x] **T-33** Hover discreto também em botões ghost/outline, badges-link, fechar do Dialog e Skeleton (sem `accent`). · Ler: 06 (Hover discreto)
 - [x] **T-34** Backend: listar (`GET /users`) e editar (`PATCH /users/:id`) usuários pelo admin. · Ler: RF-16/17, RN-14, API-16/17, AC-42..44
-- [ ] **T-35** Frontend: tabela de usuários com busca, filtro e paginação + Dialog de edição na UI-05. · Ler: UI-05, AC-45
+- [x] **T-35** Frontend: tabela de usuários com busca, filtro e paginação + Dialog de edição na UI-05. · Ler: UI-05, AC-45
 
 ## Definition of Done (toda tarefa)
 Teste vermelho→verde · lint e `tsc` ok · spec atualizada se mudou comportamento · commit Conventional · zero `any` e zero segredo no código.

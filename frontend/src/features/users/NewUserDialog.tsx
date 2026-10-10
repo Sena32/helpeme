@@ -17,19 +17,12 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { PasswordChecklist } from '@/features/auth/PasswordChecklist';
 import { useCreateUser } from '@/hooks/useUsers';
 import { createUserSchema, type CreateUserFormValues } from '@/schemas/admin-forms';
-import { ROLES, type Role } from '@/types/auth';
+import { ROLES } from '@/types/auth';
+import { ROLE_LABELS, RoleSelect } from './RoleSelect';
 
-const ROLE_LABELS: Record<Role, string> = { USER: 'Usuário', ADMIN: 'Administrador' };
 const EMPTY_FORM: CreateUserFormValues = { name: '', email: '', password: '', role: ROLES.User };
 
 export function NewUserDialog() {
@@ -104,18 +97,7 @@ export function NewUserDialog() {
               control={control}
               name="role"
               render={({ field }) => (
-                <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger id={ids.role} className="h-10 w-full">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Object.values(ROLES).map((role) => (
-                      <SelectItem key={role} value={role}>
-                        {ROLE_LABELS[role]}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <RoleSelect id={ids.role} value={field.value} onValueChange={field.onChange} />
               )}
             />
           </div>

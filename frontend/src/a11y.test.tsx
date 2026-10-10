@@ -45,10 +45,14 @@ function apiAs(user: User | null) {
       }),
     ),
     http.get(apiUrl('/categories'), () => HttpResponse.json([{ id: 'cat-1', name: 'Infra' }])),
+    http.get(apiUrl('/users'), () =>
+      HttpResponse.json({ items: [adminUser, regularUser], total: 2, page: 1, limit: 10 }),
+    ),
   );
 }
 
-const SCREENS: Array<[string, User | null, string, string]> = [
+// The optional last item is text that only shows once the screen's data has loaded.
+const SCREENS: Array<[string, User | null, string, string, string?]> = [
   ['UI-01 login/cadastro', null, '/login', 'Portal de solicitações de TI'],
   ['UI-06 painel do usuário', regularUser, '/', 'Meu painel'],
   ['UI-07 nova solicitação', regularUser, '/solicitacoes/nova', 'Nova solicitação'],
@@ -56,7 +60,7 @@ const SCREENS: Array<[string, User | null, string, string]> = [
   ['UI-02 painel admin', adminUser, '/admin', 'Painel administrativo'],
   ['UI-03 tratamento', adminUser, '/admin/solicitacoes/req-1', 'Notebook sem rede'],
   ['UI-04 categorias', adminUser, '/admin/categorias', 'Categorias'],
-  ['UI-05 usuários', adminUser, '/admin/usuarios', 'Usuários'],
+  ['UI-05 usuários', adminUser, '/admin/usuarios', 'Usuários', 'maria@example.com'],
   ['UI-09 404', regularUser, '/nao-existe', 'Página não encontrada'],
 ];
 
@@ -64,10 +68,11 @@ describe('AC-32: every screen in dark mode has no axe violations', () => {
   beforeEach(() => localStorage.setItem(THEME_STORAGE_KEY, 'dark'));
   afterEach(() => localStorage.clear());
 
-  it.each(SCREENS)('%s', async (_name, user, route, heading) => {
+  it.each(SCREENS)('%s', async (_name, user, route, heading, loadedText) => {
     apiAs(user);
     renderWithProviders(<AppRoutes />, { route });
     await screen.findByRole('heading', { level: 1, name: heading });
+    if (loadedText) await screen.findAllByText(loadedText);
     await screen.findAllByText(/./);
 
     expect(document.documentElement).toHaveClass('dark');

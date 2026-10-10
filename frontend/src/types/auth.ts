@@ -22,3 +22,23 @@ export interface RegisterInput extends LoginInput {
 export interface CreateUserInput extends RegisterInput {
   role: Role;
 }
+
+export interface UpdateUserInput {
+  name?: string;
+  email?: string;
+  role?: Role;
+}
+
+export interface UserListQuery {
+  page: number;
+  limit: number;
+  search?: string;
+  role?: Role;
+}
+
+export interface UserListPage {
+  items: User[];
+  total: number;
+  page: number;
+  limit: number;
+}

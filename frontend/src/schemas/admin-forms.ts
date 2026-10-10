@@ -15,9 +15,13 @@ export const categorySchema = z.object({
     .max(CATEGORY_NAME_MAX_LENGTH, CATEGORY_NAME_MESSAGE),
 });
 
-export const createUserSchema = registerSchema.extend({
-  role: z.enum(Object.values(ROLES), { message: 'Selecione o perfil.' }),
-});
+const roleField = z.enum(Object.values(ROLES), { message: 'Selecione o perfil.' });
+
+export const createUserSchema = registerSchema.extend({ role: roleField });
+
+// RF-17: the password is not editable by the admin (Q-31).
+export const editUserSchema = registerSchema.omit({ password: true }).extend({ role: roleField });
 
 export type CategoryFormValues = z.infer<typeof categorySchema>;
 export type CreateUserFormValues = z.infer<typeof createUserSchema>;
+export type EditUserFormValues = z.infer<typeof editUserSchema>;

@@ -112,12 +112,12 @@ Todas vêm do `.env` (modelo em `.env.example`); nenhuma credencial fica no cód
 | User (seed) | Jose da Silva | `user@test.com` | `User123@` |
 | User | — | cadastre-se na tela de login | senha com 8+ caracteres, maiúscula, minúscula, número e caractere especial |
 
-Admins podem criar outros usuários e administradores em **Usuários**.
+Admins podem listar, criar e editar usuários e administradores em **Usuários**.
 
 ## Solução
 
 - **Usuário:** cadastra-se ou entra pela tela de login, abre solicitações com título, categoria, descrição (50–1000 caracteres) e até 5 imagens JPG/PNG de até 5 MB, com pré-visualização. Vê um painel com os próprios indicadores e a lista das suas solicitações, e acompanha no detalhe o status, a prioridade, a observação e a resolução do admin.
-- **Administrador:** vê indicadores globais (total, abertas, em resolução, finalizadas, alta prioridade), gráficos por status e por categoria e uma tabela de todas as solicitações com busca, filtros, ordenação por prioridade ou data e paginação. No tratamento, classifica a prioridade, move para "Em resolução" com observação e finaliza informando a resolução. Também cria categorias e usuários.
+- **Administrador:** vê indicadores globais (total, abertas, em resolução, finalizadas, alta prioridade), gráficos por status e por categoria e uma tabela de todas as solicitações com busca, filtros, ordenação por prioridade ou data e paginação. No tratamento, classifica a prioridade, move para "Em resolução" com observação e finaliza informando a resolução. Também cria e desativa categorias, e lista (com busca e filtro por perfil), cria e edita usuários.
 - **Regras garantidas no backend:** escopo por perfil (usuário só enxerga o que é seu; acesso indevido responde 404), transições de status válidas (`RESOLVED` é final), anexos validados por tipo, tamanho, quantidade e assinatura do arquivo.
 - **Interface:** tema claro, escuro ou do sistema, contraste AA verificado nos tokens, navegação por teclado e textos em pt-BR.
 
