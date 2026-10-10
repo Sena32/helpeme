@@ -52,6 +52,10 @@ cd frontend && npm install && npm run dev
 
 Backend e frontend leem o `.env` da raiz; variáveis passadas na linha de comando têm prioridade.
 
+### Produção
+
+Guia de deploy com MongoDB Atlas, backend no Render e frontend na Vercel: [docs/deploy-production.md](docs/deploy-production.md). A execução local acima não muda.
+
 ### Testes
 
 | Comando | O que roda |

@@ -40,7 +40,7 @@ Status: ready · Marque `[x]` ao concluir. Cada tarefa lista as specs a ler.
 - [x] **T-28** Validação ao digitar em todos os formulários do front (login, cadastro, nova solicitação, tratamento, finalizar, categoria, usuário). · Ler: RN-13, AC-37, 06 (Formulários)
 
 - [x] **T-29** Só finaliza a partir de "Em resolução" (RN-07): backend + UI-03 (Finalizar só em `IN_PROGRESS`, sem prioridade) + lista suspensa de prioridade na tabela da UI-02. · Ler: RN-07/09, AC-38/39, UI-02/03
-- [ ] **T-30** Documento de produção: MongoDB Atlas, backend no Render, frontend na Vercel, sem mudar a execução local. · Ler: 03
+- [x] **T-30** Documento de produção: MongoDB Atlas, backend no Render, frontend na Vercel, sem mudar a execução local. · Ler: 03
 
 ## Definition of Done (toda tarefa)
 Teste vermelho→verde · lint e `tsc` ok · spec atualizada se mudou comportamento · commit Conventional · zero `any` e zero segredo no código.
