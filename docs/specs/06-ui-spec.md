@@ -35,7 +35,7 @@ Fonte: Inter (fallback system-ui). Raio base `0.75rem`. Espaçamento múltiplos 
 |---|---|---|---|
 | UI-01 | Login / Cadastro (abas) | público | Logo, formulário com validação da política de senha |
 | UI-02 | Dashboard Admin | ADMIN | KPIs (total, abertas, em resolução, finalizadas, alta prioridade) → gráfico por status/categoria → tabela de solicitações com lista suspensa de prioridade por linha (exceto finalizadas) (ordenar data/prioridade, filtros, paginação) |
-| UI-03 | Detalhe/Tratamento (página) | ADMIN | Dados, anexos (galeria), select de status e observação; formulário "Finalizar" (resolução) só quando o status é "Em resolução". Prioridade não é editada aqui (fica na tabela da UI-02) |
+| UI-03 | Detalhe/Tratamento (página) | ADMIN | Dados, anexos (galeria), select de status e observação. Botão "Finalizar solicitação" em cor de destaque (`accent`) no canto superior direito, visível só quando o status é "Em resolução"; abre um modal de confirmação com a resolução (obrigatória). Prioridade não é editada aqui (fica na tabela da UI-02) |
 | UI-04 | Categorias | ADMIN | Lista de todas (ativas e inativas, com badge "Ativa"/"Inativa") + criar categoria (Dialog) + ação "Desativar" com confirmação (AlertDialog) nas ativas |
 | UI-05 | Usuários | ADMIN | Criar usuário/admin (Dialog) |
 | UI-06 | Dashboard User | USER | KPIs próprios → lista das suas solicitações (somente leitura) |
@@ -47,6 +47,9 @@ Fonte: Inter (fallback system-ui). Raio base `0.75rem`. Espaçamento múltiplos 
 - Validação a cada digitação (React Hook Form `mode: 'onChange'`) com o mesmo schema zod do envio (RN-13); o erro some assim que o valor fica válido.
 - Mensagem abaixo do campo, ligada por `aria-describedby`, com `aria-invalid` no campo; erros da API continuam no topo do formulário (`role="alert"`).
 - Selects de categoria (Nova solicitação, filtro do painel admin) listam só categorias ativas (RF-15).
+
+## Menus suspensos
+- Itens de Select e DropdownMenu usam hover/foco discreto (`bg-muted`, texto `foreground`); a cor de destaque (`accent`) não é usada como hover.
 
 ## Galeria de anexos (UI-03, UI-08)
 - Miniaturas clicáveis (botão acessível "Ampliar <nome> (<tamanho>)"). O clique abre um modal (Dialog) **na mesma página** com a imagem ampliada, nome e tamanho.

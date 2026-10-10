@@ -36,11 +36,7 @@ function Handling({ request }: { request: RequestDetails }) {
     <>
       <RequestSection title="Tratamento">
         <HandlingForm request={request} />
-      </RequestSection>
-      <RequestSection title="Finalizar">
-        {request.status === 'IN_PROGRESS' ? (
-          <FinalizeForm requestId={request.id} />
-        ) : (
+        {request.status === 'OPEN' && (
           // RN-07: only requests in progress can be resolved.
           <p className="text-muted-foreground">
             Para finalizar, mude o status para "Em resolução" e salve.
@@ -68,7 +64,10 @@ export function AdminRequestPage() {
       )}
       {data && (
         <div className="space-y-6">
-          <RequestHeader request={data} showRequester />
+          <header className="flex flex-wrap items-start justify-between gap-4">
+            <RequestHeader request={data} showRequester />
+            {data.status === 'IN_PROGRESS' && <FinalizeForm requestId={data.id} />}
+          </header>
           <Handling request={data} />
           <DescriptionAndAttachments request={data} />
         </div>

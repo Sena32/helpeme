@@ -76,10 +76,10 @@ describe('AdminRequestPage (UI-03)', () => {
     await choose('Status', 'Em resolução');
     await userEvent.click(screen.getByRole('button', { name: 'Salvar alterações' }));
 
-    expect(
-      await screen.findByRole('button', { name: 'Finalizar solicitação' }),
-    ).toBeInTheDocument();
+    const finalize = await screen.findByRole('button', { name: 'Finalizar solicitação' });
     expect(patches).toEqual([{ status: 'IN_PROGRESS' }]);
+    // Top-right of the page header, next to the title.
+    expect(screen.getByRole('heading', { level: 1 }).closest('header')).toContainElement(finalize);
   });
 
   it('AC-20: moves to "Em resolução" with a note', async () => {
@@ -120,44 +120,53 @@ describe('AdminRequestPage (UI-03)', () => {
     expect(patches).toEqual([]);
   });
 
-  it('AC-21: does not finalize without a resolution', async () => {
+  it('AC-21: keeps the modal open and asks for the resolution', async () => {
     const { patches } = setup(requestDetails({ status: 'IN_PROGRESS' }));
     await handling();
 
     await userEvent.click(screen.getByRole('button', { name: 'Finalizar solicitação' }));
+    const dialog = await screen.findByRole('dialog', { name: 'Finalizar solicitação' });
+    await userEvent.click(within(dialog).getByRole('button', { name: 'Finalizar' }));
 
-    expect(await screen.findByText('Informe a resolução para finalizar.')).toBeInTheDocument();
-    expect(screen.queryByRole('alertdialog')).not.toBeInTheDocument();
+    expect(
+      await within(dialog).findByText('Informe a resolução para finalizar.'),
+    ).toBeInTheDocument();
+    expect(screen.getByRole('dialog', { name: 'Finalizar solicitação' })).toBeInTheDocument();
     expect(patches).toEqual([]);
   });
 
-  it('AC-22: finalizes after confirmation and becomes read-only', async () => {
+  it('AC-41: finalizes from the modal and becomes read-only', async () => {
     const { patches } = setup(requestDetails({ status: 'IN_PROGRESS' }));
     await handling();
 
-    await userEvent.type(screen.getByLabelText('Resolução'), 'Cabo substituído.');
     await userEvent.click(screen.getByRole('button', { name: 'Finalizar solicitação' }));
-    const dialog = await screen.findByRole('alertdialog', { name: 'Finalizar solicitação?' });
+    const dialog = await screen.findByRole('dialog', { name: 'Finalizar solicitação' });
+    expect(
+      within(dialog).getByText('Depois de finalizada, a solicitação não poderá mais ser alterada.'),
+    ).toBeInTheDocument();
+    await userEvent.type(within(dialog).getByLabelText('Resolução'), 'Cabo substituído.');
     await userEvent.click(within(dialog).getByRole('button', { name: 'Finalizar' }));
 
     expect(await screen.findByText('Solicitação finalizada.')).toBeInTheDocument();
     expect(patches).toEqual([{ status: 'RESOLVED', resolution: 'Cabo substituído.' }]);
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     expect(await screen.findByText('Finalizada em 11/03/2026, 10:00')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Finalizar solicitação' })).not.toBeInTheDocument();
     expect(
       screen.queryByRole('form', { name: 'Classificação e andamento' }),
     ).not.toBeInTheDocument();
   });
 
-  it('lets the admin cancel the finalization', async () => {
+  it('AC-41: cancelling the modal changes nothing', async () => {
     const { patches } = setup(requestDetails({ status: 'IN_PROGRESS' }));
     await handling();
 
-    await userEvent.type(screen.getByLabelText('Resolução'), 'Resolvido.');
     await userEvent.click(screen.getByRole('button', { name: 'Finalizar solicitação' }));
-    await userEvent.click(
-      within(await screen.findByRole('alertdialog')).getByRole('button', { name: 'Cancelar' }),
-    );
+    const dialog = await screen.findByRole('dialog', { name: 'Finalizar solicitação' });
+    await userEvent.type(within(dialog).getByLabelText('Resolução'), 'Resolvido.');
+    await userEvent.click(within(dialog).getByRole('button', { name: 'Cancelar' }));
 
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     expect(patches).toEqual([]);
   });
 
@@ -227,7 +236,6 @@ describe('AdminRequestPage (UI-03)', () => {
     setup(requestDetails({ status: 'IN_PROGRESS' }));
     await handling();
     const note = screen.getByLabelText('Observação');
-    const resolution = screen.getByLabelText('Resolução');
 
     await userEvent.click(note);
     await userEvent.paste('n'.repeat(501));
@@ -239,6 +247,8 @@ describe('AdminRequestPage (UI-03)', () => {
       screen.queryByText('A observação deve ter no máximo 500 caracteres.'),
     ).not.toBeInTheDocument();
 
+    await userEvent.click(screen.getByRole('button', { name: 'Finalizar solicitação' }));
+    const resolution = within(await screen.findByRole('dialog')).getByLabelText('Resolução');
     await userEvent.type(resolution, 'x');
     await userEvent.clear(resolution);
     expect(await screen.findByText('Informe a resolução para finalizar.')).toBeInTheDocument();
