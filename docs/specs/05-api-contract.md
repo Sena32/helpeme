@@ -8,7 +8,7 @@ Status: ready · Prefixo `/api` · JSON · Auth por cookie httpOnly `access_toke
 | API-03 | `POST /auth/logout` | auth | — | 204 limpa cookie | RF-13 |
 | API-04 | `GET /auth/me` | auth | — | 200 `{user}` | RF-13 |
 | API-05 | `POST /users` | ADMIN | `{name,email,password,role}` | 201 `{user}` · 403/409 | RF-03 |
-| API-06 | `GET /categories` | auth | — | 200 `[{id,name}]` (ativas) | RF-12 |
+| API-06 | `GET /categories` | auth | query (ADMIN): `includeInactive=true` | 200 `[{id,name}]` (ativas); com `includeInactive` → `[{id,name,isActive}]` (todas); USER com `includeInactive` → 403 | RF-12, RF-15 |
 | API-07 | `POST /categories` | ADMIN | `{name}` | 201 · 409 | RF-12 |
 | API-08 | `POST /requests` | auth | `multipart/form-data`: `title,categoryId,description,files[]` | 201 `{request}` · 400/413 | RF-05 |
 | API-09 | `GET /requests` | auth | query: `page,limit,sortBy(createdAt\|priority),order,status,categoryId,priority,search` | 200 `{items,total,page,limit}`; USER: só as suas | RF-06/07/08 |
@@ -17,6 +17,7 @@ Status: ready · Prefixo `/api` · JSON · Auth por cookie httpOnly `access_toke
 | API-12 | `GET /requests/:id/attachments/:attachmentId` | dono ou ADMIN | — | 200 stream da imagem · 404 | RF-14 |
 | API-13 | `GET /dashboard/summary` | auth | — | 200 resumo (abaixo) | RF-06/07 |
 | API-14 | `GET /health` | público | — | 200 `{status:'ok'}` | RNF-07 |
+| API-15 | `PATCH /categories/:id/deactivate` | ADMIN | — | 200 `{id,name,isActive:false}` (idempotente) · 403/404 | RF-15 |
 
 ## Resumo do dashboard (API-13)
 ```ts

@@ -36,12 +36,17 @@ Fonte: Inter (fallback system-ui). Raio base `0.75rem`. Espaçamento múltiplos 
 | UI-01 | Login / Cadastro (abas) | público | Logo, formulário com validação da política de senha |
 | UI-02 | Dashboard Admin | ADMIN | KPIs (total, abertas, em resolução, finalizadas, alta prioridade) → gráfico por status/categoria → tabela de solicitações (ordenar data/prioridade, filtros, paginação) |
 | UI-03 | Detalhe/Tratamento (Sheet ou página) | ADMIN | Dados, anexos (galeria), selects prioridade/status, observação, resolução, ação Finalizar |
-| UI-04 | Categorias | ADMIN | Lista + criar categoria (Dialog) |
+| UI-04 | Categorias | ADMIN | Lista de todas (ativas e inativas, com badge "Ativa"/"Inativa") + criar categoria (Dialog) + ação "Desativar" com confirmação (AlertDialog) nas ativas |
 | UI-05 | Usuários | ADMIN | Criar usuário/admin (Dialog) |
 | UI-06 | Dashboard User | USER | KPIs próprios → lista das suas solicitações (somente leitura) |
 | UI-07 | Nova solicitação | USER | Título, categoria, descrição (contador 0/1000, mínimo 50), upload múltiplo com preview, valida JPG/PNG ≤ 5 MB |
 | UI-08 | Detalhe da solicitação (leitura) | USER | Status, prioridade, observação e resolução do admin, anexos |
 | UI-09 | 404 / Sem permissão | todos | Mensagem + ação voltar |
+
+## Formulários
+- Validação a cada digitação (React Hook Form `mode: 'onChange'`) com o mesmo schema zod do envio (RN-13); o erro some assim que o valor fica válido.
+- Mensagem abaixo do campo, ligada por `aria-describedby`, com `aria-invalid` no campo; erros da API continuam no topo do formulário (`role="alert"`).
+- Selects de categoria (Nova solicitação, filtro do painel admin) listam só categorias ativas (RF-15).
 
 ## Layout
 Sidebar colapsável (drawer no mobile) + topbar com toggle de tema e menu do usuário. Grid de KPIs `1/2/4` colunas; tabela com scroll-x no mobile e linha clicável com foco por teclado.

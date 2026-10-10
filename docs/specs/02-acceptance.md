@@ -36,3 +36,7 @@ Status: ready · Nomeie cada teste com o `AC-xx`.
 | AC-31 | requisição qualquer | log gerado | JSON com `requestId` sem senha/token | RNF-04 |
 | AC-32 | tema escuro | renderiza telas | tokens aplicados, sem cores fixas, contraste AA | RNF-05 |
 | AC-33 | banco vazio e `SEED_USER_*` definidas | executa seed duas vezes | 1 usuário `USER` de teste (login funciona), sem duplicar; sem as variáveis, nenhum usuário de teste | RF-04 |
+| AC-34 | admin, categoria ativa "RH" | desativa "RH" | 200 `isActive=false`; `GET /categories` não lista "RH"; nova solicitação com "RH" → 400; desativar de novo → 200 | RF-15, RN-12 |
+| AC-35 | user comum | desativa categoria | 403 | RF-15 |
+| AC-36 | categoria desativada | abre "Nova solicitação" ou o filtro de categoria do painel admin | categoria não aparece no select; em Categorias (UI-04) aparece como "Inativa" | RF-15 |
+| AC-37 | qualquer formulário | digita valor inválido (ex.: descrição com 49 chars) e depois corrige (50 chars) | mensagem de erro aparece sem enviar e some ao corrigir | RN-13 |

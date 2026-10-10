@@ -16,6 +16,7 @@ Status: ready
 | RF-10 | Admin altera status para `IN_PROGRESS` ("em resolução") e adiciona observação. |
 | RF-11 | Admin finaliza (`RESOLVED`) informando resolução (obrigatória). |
 | RF-12 | Admin cria novas categorias; categorias padrão: Infra, Desenvolvimento, RH, Suporte Técnico, Outros. |
+| RF-15 | Admin desativa categorias; seletores de categoria no front exibem somente categorias ativas. |
 | RF-13 | Todas as telas protegidas por rota/role; logout. |
 | RF-14 | Anexos acessíveis só ao dono da solicitação e a admins. |
 
@@ -33,6 +34,8 @@ Status: ready
 | RN-09 | Prioridade pode ser alterada enquanto não `RESOLVED`; sem prioridade = não classificada (ordena por último). |
 | RN-10 | User só acessa recursos próprios (403/404 caso contrário). |
 | RN-11 | Categoria da solicitação deve existir e estar ativa. |
+| RN-12 | Desativar categoria é idempotente e não altera solicitações existentes (mantêm a categoria e continuam contando no dashboard); categoria inativa não aceita novas solicitações (RN-11). Seed não reativa categoria desativada. |
+| RN-13 | Formulários do front validam a cada digitação (não só ao enviar), com as mesmas regras do envio. |
 
 ## Não funcionais
 | ID | Requisito |

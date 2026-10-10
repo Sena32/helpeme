@@ -12,7 +12,7 @@ Status: draft · Premissa vale até alguém decidir o contrário.
 | Q-07 | "User pode apenas visualizar" | Sem editar/cancelar/excluir solicitação |
 | Q-08 | Admin vê solicitações de outros admins | Sim, todas |
 | Q-09 | Nome do sistema | "HelpeMe" (grafia do enunciado) |
-| Q-10 | Admin pode desativar/excluir categoria | Fora do MVP; apenas criar (campo `isActive` reservado) |
+| Q-10 | Admin pode desativar/excluir categoria | Desativar: sim (RF-15, T-27). Excluir e reativar: fora do escopo (não pedidos) |
 | Q-11 | Versão do NestJS | Nest 11 (CommonJS); Nest 12 é só ESM e quebra Jest/ts-jest |
 | Q-12 | Formato do `/health` | `GET /api/health` → `200 { "status": "ok" }`, público, sem checar Mongo (até T-05) |
 | Q-13 | Tokens shadcn não definidos na SPEC-06 | Derivados da paleta: `*-foreground` = foreground/primary-foreground conforme contraste; `secondary`/`muted` `#F1F5F9`/`#1A2440`; `popover` = card; `input` = border. `accent` segue a SPEC (teal). Contraste AA validado em `design-tokens.test.ts` |
