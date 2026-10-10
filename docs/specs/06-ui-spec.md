@@ -48,6 +48,10 @@ Fonte: Inter (fallback system-ui). Raio base `0.75rem`. Espaçamento múltiplos 
 - Mensagem abaixo do campo, ligada por `aria-describedby`, com `aria-invalid` no campo; erros da API continuam no topo do formulário (`role="alert"`).
 - Selects de categoria (Nova solicitação, filtro do painel admin) listam só categorias ativas (RF-15).
 
+## Galeria de anexos (UI-03, UI-08)
+- Miniaturas clicáveis (botão acessível "Ampliar <nome> (<tamanho>)"). O clique abre um modal (Dialog) **na mesma página** com a imagem ampliada, nome e tamanho.
+- O modal fecha pelo botão "Fechar", por `Esc` ou clicando fora; o foco volta à miniatura.
+
 ## Layout
 Sidebar colapsável (drawer no mobile) + topbar com toggle de tema e menu do usuário. Grid de KPIs `1/2/4` colunas; tabela com scroll-x no mobile e linha clicável com foco por teclado.
 

@@ -1,4 +1,4 @@
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { http, HttpResponse } from 'msw';
 import { Route, Routes } from 'react-router';
@@ -64,7 +64,7 @@ describe('RequestDetailPage (UI-08)', () => {
     expect(screen.getByText('Finalizada em 11/03/2026, 10:00')).toBeInTheDocument();
   });
 
-  it('shows attachments as a gallery served by the protected endpoint', async () => {
+  it('shows attachment thumbnails served by the protected endpoint', async () => {
     detailReturns(
       requestDetails({
         attachments: [
@@ -75,12 +75,51 @@ describe('RequestDetailPage (UI-08)', () => {
 
     renderDetail();
 
-    const image = await screen.findByRole('img', { name: 'tela.png' });
-    expect(image).toHaveAttribute('src', '/api/requests/req-1/attachments/att-1');
-    expect(screen.getByRole('link', { name: 'Abrir tela.png (2 KB) em nova aba' })).toHaveAttribute(
-      'href',
+    const thumbnail = await screen.findByRole('img', { name: 'tela.png' });
+    expect(thumbnail).toHaveAttribute('src', '/api/requests/req-1/attachments/att-1');
+    expect(screen.queryByRole('link', { name: /nova aba/ })).not.toBeInTheDocument();
+  });
+
+  it('AC-40: opens the image enlarged in a modal on the same page and closes it', async () => {
+    detailReturns(
+      requestDetails({
+        attachments: [
+          { id: 'att-1', originalName: 'tela.png', mimeType: 'image/png', sizeBytes: 2048 },
+        ],
+      }),
+    );
+    renderDetail();
+    const thumbnailButton = await screen.findByRole('button', { name: 'Ampliar tela.png (2 KB)' });
+
+    await userEvent.click(thumbnailButton);
+
+    const dialog = await screen.findByRole('dialog', { name: 'tela.png' });
+    expect(within(dialog).getByRole('img', { name: 'tela.png' })).toHaveAttribute(
+      'src',
       '/api/requests/req-1/attachments/att-1',
     );
+    expect(within(dialog).getByText('2 KB')).toBeInTheDocument();
+
+    await userEvent.click(within(dialog).getByRole('button', { name: 'Fechar' }));
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(thumbnailButton).toHaveFocus();
+  });
+
+  it('AC-40: closes the modal with Escape', async () => {
+    detailReturns(
+      requestDetails({
+        attachments: [
+          { id: 'att-1', originalName: 'tela.png', mimeType: 'image/png', sizeBytes: 2048 },
+        ],
+      }),
+    );
+    renderDetail();
+
+    await userEvent.click(await screen.findByRole('button', { name: 'Ampliar tela.png (2 KB)' }));
+    await screen.findByRole('dialog', { name: 'tela.png' });
+    await userEvent.keyboard('{Escape}');
+
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
   it('says when there are no attachments', async () => {

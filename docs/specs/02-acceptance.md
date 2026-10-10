@@ -42,3 +42,4 @@ Status: ready · Nomeie cada teste com o `AC-xx`.
 | AC-35 | user comum | desativa categoria | 403 | RF-15 |
 | AC-36 | categoria desativada | abre "Nova solicitação" ou o filtro de categoria do painel admin | categoria não aparece no select; em Categorias (UI-04) aparece como "Inativa" | RF-15 |
 | AC-37 | qualquer formulário | digita valor inválido (ex.: descrição com 49 chars) e depois corrige (50 chars) | mensagem de erro aparece sem enviar e some ao corrigir | RN-13 |
+| AC-40 | solicitação com anexo | clica na miniatura | modal na mesma página com a imagem ampliada; "Fechar" (ou `Esc`) fecha o modal | RF-14 |
