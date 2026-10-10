@@ -31,3 +31,6 @@ export class User {
 export type UserDocument = HydratedDocument<User>;
 
 export const UserSchema = SchemaFactory.createForClass(User);
+
+// API-16 lists users newest first; _id keeps pagination stable on equal dates.
+UserSchema.index({ createdAt: -1, _id: -1 });

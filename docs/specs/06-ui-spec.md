@@ -37,7 +37,7 @@ Fonte: Inter (fallback system-ui). Raio base `0.75rem`. Espaçamento múltiplos 
 | UI-02 | Dashboard Admin | ADMIN | KPIs (total, abertas, em resolução, finalizadas, alta prioridade) → gráfico por status/categoria → tabela de solicitações com lista suspensa de prioridade por linha (exceto finalizadas) (ordenar data/prioridade, filtros, paginação) |
 | UI-03 | Detalhe/Tratamento (página) | ADMIN | Dados, anexos (galeria), select de status e observação. Botão "Finalizar solicitação" em cor de destaque (`accent`) no canto superior direito, visível só quando o status é "Em resolução"; abre um modal de confirmação com a resolução (obrigatória). Prioridade não é editada aqui (fica na tabela da UI-02) |
 | UI-04 | Categorias | ADMIN | Lista de todas (ativas e inativas, com badge "Ativa"/"Inativa") + criar categoria (Dialog) + ação "Desativar" com confirmação (AlertDialog) nas ativas |
-| UI-05 | Usuários | ADMIN | Criar usuário/admin (Dialog) |
+| UI-05 | Usuários | ADMIN | Tabela (nome, e-mail, perfil, cadastro) com busca por nome/e-mail, filtro por perfil e paginação; criar usuário/admin (Dialog); "Editar" por linha abre Dialog com nome, e-mail e perfil (perfil desabilitado na própria conta) |
 | UI-06 | Dashboard User | USER | KPIs próprios → lista das suas solicitações (somente leitura) |
 | UI-07 | Nova solicitação | USER | Título, categoria, descrição (contador 0/1000, mínimo 50), upload múltiplo com preview, valida JPG/PNG ≤ 5 MB |
 | UI-08 | Detalhe da solicitação (leitura) | USER | Status, prioridade, observação e resolução do admin, anexos |

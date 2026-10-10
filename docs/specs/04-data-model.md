@@ -19,6 +19,8 @@ enum Priority { High = 'HIGH', Medium = 'MEDIUM', Low = 'LOW' }
 | role | Role | default `USER` |
 | createdAt/updatedAt | Date | timestamps |
 
+Índice: `{ createdAt: -1, _id: -1 }` para a listagem de API-16.
+
 ## categories
 | Campo | Tipo | Regras |
 |---|---|---|

@@ -18,6 +18,8 @@ Status: ready · Prefixo `/api` · JSON · Auth por cookie httpOnly `access_toke
 | API-13 | `GET /dashboard/summary` | auth | — | 200 resumo (abaixo) | RF-06/07 |
 | API-14 | `GET /health` | público | — | 200 `{status:'ok'}` | RNF-07 |
 | API-15 | `PATCH /categories/:id/deactivate` | ADMIN | — | 200 `{id,name,isActive:false}` (idempotente) · 403/404 | RF-15 |
+| API-16 | `GET /users` | ADMIN | query: `page,limit,search,role` | 200 `{items:PublicUser[],total,page,limit}` (cadastro mais recente primeiro) · 403 | RF-16 |
+| API-17 | `PATCH /users/:id` | ADMIN | `{name?,email?,role?}` (ao menos um) | 200 `{user}` · 400/403/404/409 | RF-17, RN-14 |
 
 ## Resumo do dashboard (API-13)
 ```ts
@@ -29,6 +31,7 @@ Status: ready · Prefixo `/api` · JSON · Auth por cookie httpOnly `access_toke
 ```
 
 ## Convenções
+- `PublicUser`: `id,name,email,role,createdAt,updatedAt` (nunca `passwordHash`). `search` de API-16 busca no nome ou e-mail (case-insensitive).
 - `RequestListItem`: `id,title,categoryName,status,priority,createdAt,createdBy{name}` (admin).
 - Ordenação por prioridade usa `priorityRank` desc, desempate `createdAt` desc.
 - Swagger em `/api/docs` (opcional) gerado dos DTOs.

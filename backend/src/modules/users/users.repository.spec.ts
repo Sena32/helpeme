@@ -102,4 +102,55 @@ describe('UsersRepository', () => {
     await expect(repository.findById('64b7f0c2a1b2c3d4e5f60718')).resolves.toBeNull();
     await expect(repository.findById('not-an-object-id')).resolves.toBeNull();
   });
+
+  describe('list (API-16)', () => {
+    it('treats the search as literal text, not a regular expression', async () => {
+      await repository.create({ ...newUserRecord, name: 'Ana (TI)', email: 'ana@example.com' });
+      await repository.create({
+        ...newUserRecord,
+        name: 'Anderson',
+        email: 'anderson@example.com',
+      });
+
+      const { items, total } = await repository.list({ skip: 0, limit: 10, search: '(ti)' });
+
+      expect(total).toBe(1);
+      expect(items.map((user) => user.name)).toEqual(['Ana (TI)']);
+    });
+
+    it('has an index for the newest-first listing', async () => {
+      const indexes = await userModel.collection.indexes();
+
+      expect(indexes.map((index) => index.key)).toContainEqual({ createdAt: -1, _id: -1 });
+    });
+  });
+
+  describe('update (API-17)', () => {
+    it('keeps the password hash and returns the public user', async () => {
+      const user = await repository.create(newUserRecord);
+
+      const updated = await repository.update(user.id, { name: 'Maria Souza', role: Role.Admin });
+
+      expect(updated).toMatchObject({ name: 'Maria Souza', role: Role.Admin });
+      expect(updated).not.toHaveProperty('passwordHash');
+      const stored = await userModel.findById(user.id).select('+passwordHash').lean();
+      expect(stored?.passwordHash).toBe(newUserRecord.passwordHash);
+    });
+
+    it("throws ConflictException for another user's e-mail (RN-01)", async () => {
+      await repository.create(newUserRecord);
+      const other = await repository.create({ ...newUserRecord, email: 'joao@example.com' });
+
+      await expect(
+        repository.update(other.id, { email: newUserRecord.email }),
+      ).rejects.toBeInstanceOf(ConflictException);
+    });
+
+    it('returns null for unknown or malformed ids', async () => {
+      await expect(
+        repository.update('0123456789abcdef01234567', { name: 'X Y' }),
+      ).resolves.toBeNull();
+      await expect(repository.update('not-an-id', { name: 'X Y' })).resolves.toBeNull();
+    });
+  });
 });

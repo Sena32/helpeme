@@ -17,6 +17,8 @@ Status: ready
 | RF-11 | Admin finaliza (`RESOLVED`) informando resolução (obrigatória). |
 | RF-12 | Admin cria novas categorias; categorias padrão: Infra, Desenvolvimento, RH, Suporte Técnico, Outros. |
 | RF-15 | Admin desativa categorias; seletores de categoria no front exibem somente categorias ativas. |
+| RF-16 | Admin lista os usuários (nome, e-mail, perfil, data de cadastro) com busca por nome ou e-mail, filtro por perfil e paginação. |
+| RF-17 | Admin edita nome, e-mail e perfil de um usuário. |
 | RF-13 | Todas as telas protegidas por rota/role; logout. |
 | RF-14 | Anexos acessíveis só ao dono da solicitação e a admins. |
 
@@ -35,6 +37,7 @@ Status: ready
 | RN-10 | User só acessa recursos próprios (403/404 caso contrário). |
 | RN-11 | Categoria da solicitação deve existir e estar ativa. |
 | RN-12 | Desativar categoria é idempotente e não altera solicitações existentes (mantêm a categoria e continuam contando no dashboard); categoria inativa não aceita novas solicitações (RN-11). Seed não reativa categoria desativada. |
+| RN-14 | Edição de usuário segue RN-01 e o nome de 2–100 chars; o admin não altera o próprio perfil (evita ficar sem acesso). A mudança de perfil vale a partir do próximo login do usuário editado. |
 | RN-13 | Formulários do front validam a cada digitação (não só ao enviar), com as mesmas regras do envio. |
 
 ## Não funcionais

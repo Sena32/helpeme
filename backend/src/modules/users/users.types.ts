@@ -27,3 +27,30 @@ export interface UserCredentials {
   user: PublicUser;
   passwordHash: string;
 }
+
+export interface UserChanges {
+  name?: string;
+  email?: string;
+  role?: Role;
+}
+
+export interface ListUsersQuery {
+  page?: number;
+  limit?: number;
+  search?: string;
+  role?: Role;
+}
+
+export interface UserListOptions {
+  skip: number;
+  limit: number;
+  search?: string;
+  role?: Role;
+}
+
+export interface UserListPage {
+  items: PublicUser[];
+  total: number;
+  page: number;
+  limit: number;
+}
