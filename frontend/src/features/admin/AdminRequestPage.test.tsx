@@ -217,4 +217,25 @@ describe('AdminRequestPage (UI-03)', () => {
     await userEvent.click(screen.getByRole('link', { name: 'Voltar ao painel' }));
     expect(await screen.findByText('Painel admin')).toBeInTheDocument();
   });
+
+  it('AC-37: validates the note and the resolution while typing', async () => {
+    setup(requestDetails());
+    await handling();
+    const note = screen.getByLabelText('Observação');
+    const resolution = screen.getByLabelText('Resolução');
+
+    await userEvent.click(note);
+    await userEvent.paste('n'.repeat(501));
+    expect(
+      await screen.findByText('A observação deve ter no máximo 500 caracteres.'),
+    ).toBeInTheDocument();
+    await userEvent.type(note, '{Backspace}');
+    expect(
+      screen.queryByText('A observação deve ter no máximo 500 caracteres.'),
+    ).not.toBeInTheDocument();
+
+    await userEvent.type(resolution, 'x');
+    await userEvent.clear(resolution);
+    expect(await screen.findByText('Informe a resolução para finalizar.')).toBeInTheDocument();
+  });
 });

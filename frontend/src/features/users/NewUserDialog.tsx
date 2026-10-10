@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { LIVE_VALIDATION } from '@/lib/forms';
 import { UserPlus } from 'lucide-react';
 import { useId, useState } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
@@ -36,6 +37,7 @@ export function NewUserDialog() {
   const [isOpen, setOpen] = useState(false);
   const createUser = useCreateUser();
   const { register, handleSubmit, formState, reset, control } = useForm<CreateUserFormValues>({
+    ...LIVE_VALIDATION,
     resolver: zodResolver(createUserSchema),
     defaultValues: EMPTY_FORM,
   });

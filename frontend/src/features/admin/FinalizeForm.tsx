@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { LIVE_VALIDATION } from '@/lib/forms';
 import { useId, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -29,6 +30,7 @@ export function FinalizeForm({ requestId }: { requestId: string }) {
   const [pending, setPending] = useState<FinalizeRequestFormValues | null>(null);
   const update = useUpdateRequest(requestId);
   const { register, handleSubmit, formState, control } = useForm<FinalizeRequestFormValues>({
+    ...LIVE_VALIDATION,
     resolver: zodResolver(finalizeRequestSchema),
     defaultValues: { resolution: '' },
   });

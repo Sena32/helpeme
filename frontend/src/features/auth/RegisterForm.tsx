@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { LIVE_VALIDATION } from '@/lib/forms';
 import { useId } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { FormError } from '@/components/forms/FormError';
@@ -12,6 +13,7 @@ export function RegisterForm({ onRegistered }: { onRegistered: () => void }) {
   const registerAccount = useRegister();
   const checklistId = useId();
   const { register, handleSubmit, formState, control } = useForm<RegisterFormValues>({
+    ...LIVE_VALIDATION,
     resolver: zodResolver(registerSchema),
     defaultValues: { name: '', email: '', password: '' },
   });

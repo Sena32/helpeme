@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { LIVE_VALIDATION } from '@/lib/forms';
 import { useForm } from 'react-hook-form';
 import { FormError } from '@/components/forms/FormError';
 import { FormField } from '@/components/forms/FormField';
@@ -9,6 +10,7 @@ import { loginSchema, type LoginFormValues } from '@/schemas/auth';
 export function LoginForm() {
   const login = useLogin();
   const { register, handleSubmit, formState } = useForm<LoginFormValues>({
+    ...LIVE_VALIDATION,
     resolver: zodResolver(loginSchema),
     defaultValues: { email: '', password: '' },
   });

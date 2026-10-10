@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { LIVE_VALIDATION } from '@/lib/forms';
 import { useId } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { useNavigate } from 'react-router';
@@ -27,6 +28,7 @@ export function NewRequestPage() {
   const createRequest = useCreateRequest();
   const selection = useAttachmentSelection();
   const { register, handleSubmit, control, formState } = useForm<CreateRequestFormValues>({
+    ...LIVE_VALIDATION,
     resolver: zodResolver(createRequestSchema),
     defaultValues: { title: '', categoryId: '', description: '' },
   });

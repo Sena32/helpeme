@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { LIVE_VALIDATION } from '@/lib/forms';
 import { useId } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -27,6 +28,7 @@ export function HandlingForm({ request }: { request: RequestDetails }) {
   const ids = { priority: useId(), status: useId(), note: useId() };
   const update = useUpdateRequest(request.id);
   const { control, register, handleSubmit, formState, reset } = useForm<HandlingFormValues>({
+    ...LIVE_VALIDATION,
     resolver: zodResolver(handlingSchema),
     values: toHandlingValues(request),
   });

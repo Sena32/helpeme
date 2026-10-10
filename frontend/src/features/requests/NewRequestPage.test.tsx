@@ -199,4 +199,21 @@ describe('NewRequestPage (UI-07)', () => {
 
     expect(categoryQueries).toEqual(['']);
   });
+
+  it('AC-37: validates the description while typing (49 → error, 50 → ok)', async () => {
+    const actor = user();
+    renderPage();
+    const description = await screen.findByLabelText('Descrição');
+
+    await actor.click(description);
+    await actor.paste('d'.repeat(49));
+    expect(
+      await screen.findByText('A descrição deve ter entre 50 e 1000 caracteres.'),
+    ).toBeInTheDocument();
+
+    await actor.type(description, 'd');
+    expect(
+      screen.queryByText('A descrição deve ter entre 50 e 1000 caracteres.'),
+    ).not.toBeInTheDocument();
+  });
 });

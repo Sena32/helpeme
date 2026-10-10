@@ -151,4 +151,27 @@ describe('AuthPage (UI-01)', () => {
 
     expect(await screen.findByText('Home do admin')).toBeInTheDocument();
   });
+
+  it('AC-37: validates the login email while typing', async () => {
+    renderAuthPage();
+    const email = await screen.findByLabelText('E-mail');
+
+    await userEvent.type(email, 'maria@');
+    expect(await screen.findByText('Informe um e-mail válido.')).toBeInTheDocument();
+
+    await userEvent.type(email, 'example.com');
+    expect(screen.queryByText('Informe um e-mail válido.')).not.toBeInTheDocument();
+  });
+
+  it('AC-37: validates the sign-up password while typing', async () => {
+    renderAuthPage();
+    await userEvent.click(await screen.findByRole('tab', { name: 'Cadastrar' }));
+    const password = screen.getByLabelText('Senha');
+
+    await userEvent.type(password, 'Senha12');
+    expect(await screen.findByText(/A senha deve ter no mínimo 8 caracteres/)).toBeInTheDocument();
+
+    await userEvent.type(password, '3@');
+    expect(screen.queryByText(/A senha deve ter no mínimo 8 caracteres/)).not.toBeInTheDocument();
+  });
 });

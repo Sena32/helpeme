@@ -37,7 +37,7 @@ Status: ready · Marque `[x]` ao concluir. Cada tarefa lista as specs a ler.
 
 ## Fase 4 — Melhorias
 - [x] **T-27** Desativar categoria: `PATCH /categories/:id/deactivate` (ADMIN, idempotente), `GET /categories?includeInactive=true` (ADMIN); UI-04 com status e ação "Desativar" (confirmação); selects de categoria só com ativas. · Ler: RF-15, RN-11/12, API-06/15, AC-34..36, UI-04
-- [ ] **T-28** Validação ao digitar em todos os formulários do front (login, cadastro, nova solicitação, tratamento, finalizar, categoria, usuário). · Ler: RN-13, AC-37, 06 (Formulários)
+- [x] **T-28** Validação ao digitar em todos os formulários do front (login, cadastro, nova solicitação, tratamento, finalizar, categoria, usuário). · Ler: RN-13, AC-37, 06 (Formulários)
 
 ## Definition of Done (toda tarefa)
 Teste vermelho→verde · lint e `tsc` ok · spec atualizada se mudou comportamento · commit Conventional · zero `any` e zero segredo no código.

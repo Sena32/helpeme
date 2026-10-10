@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { LIVE_VALIDATION } from '@/lib/forms';
 import { Plus } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -22,6 +23,7 @@ export function NewCategoryDialog() {
   const [isOpen, setOpen] = useState(false);
   const createCategory = useCreateCategory();
   const { register, handleSubmit, formState, reset } = useForm<CategoryFormValues>({
+    ...LIVE_VALIDATION,
     resolver: zodResolver(categorySchema),
     defaultValues: { name: '' },
   });

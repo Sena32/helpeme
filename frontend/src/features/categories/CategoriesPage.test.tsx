@@ -131,4 +131,21 @@ describe('CategoriesPage (UI-04)', () => {
     ).toBeInTheDocument();
     expect(posted).toEqual([]);
   });
+
+  it('AC-37: validates the category name while typing', async () => {
+    setup();
+    await userEvent.click(await screen.findByRole('button', { name: 'Nova categoria' }));
+    const dialog = await screen.findByRole('dialog', { name: 'Nova categoria' });
+    const name = within(dialog).getByLabelText('Nome');
+
+    await userEvent.type(name, 'a');
+    expect(
+      await within(dialog).findByText('O nome da categoria deve ter entre 2 e 50 caracteres.'),
+    ).toBeInTheDocument();
+
+    await userEvent.type(name, 'b');
+    expect(
+      within(dialog).queryByText('O nome da categoria deve ter entre 2 e 50 caracteres.'),
+    ).not.toBeInTheDocument();
+  });
 });

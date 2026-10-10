@@ -86,4 +86,16 @@ describe('UsersPage (UI-05)', () => {
 
     expect(await within(dialog).findByRole('alert')).toHaveTextContent('E-mail já cadastrado.');
   });
+
+  it('AC-37: validates the e-mail while typing', async () => {
+    setup();
+    const dialog = await openDialog();
+    const email = within(dialog).getByLabelText('E-mail');
+
+    await userEvent.type(email, 'ana@');
+    expect(await within(dialog).findByText('Informe um e-mail válido.')).toBeInTheDocument();
+
+    await userEvent.type(email, 'example.com');
+    expect(within(dialog).queryByText('Informe um e-mail válido.')).not.toBeInTheDocument();
+  });
 });
