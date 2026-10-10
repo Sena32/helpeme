@@ -10,7 +10,8 @@ Portal interno de solicitações para o setor de TI. Usuários abrem e acompanha
 
 O sistema pode ser testado em **https://helpeme.vercel.app/**, sem instalar nada (frontend na Vercel, backend no Render e banco no MongoDB Atlas; veja [docs/deploy-production.md](docs/deploy-production.md)).
 
-- Crie uma conta na aba de cadastro da tela de login para testar o perfil de usuário.
+- O admin root (`admin@admin.com`) e o usuário de teste (`user@test.com`) estão cadastrados na demonstração com as mesmas senhas da seção [Usuários para teste](#usuários-para-teste).
+- Também é possível criar uma conta na aba de cadastro da tela de login.
 - O backend roda no plano gratuito do Render e "dorme" após inatividade: o primeiro acesso pode levar alguns segundos.
 
 ## Como instalar
