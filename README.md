@@ -6,6 +6,13 @@ Portal interno de solicitações para o setor de TI. Usuários abrem e acompanha
 
 **Stack:** React 19 + Vite + TypeScript · NestJS 11 + TypeScript · MongoDB 7 · Docker Compose · Tailwind + shadcn/ui · TanStack Query · Vitest + Testing Library + MSW · Jest + Supertest.
 
+## Demonstração online
+
+O sistema pode ser testado em **https://helpeme.vercel.app/**, sem instalar nada (frontend na Vercel, backend no Render e banco no MongoDB Atlas; veja [docs/deploy-production.md](docs/deploy-production.md)).
+
+- Crie uma conta na aba de cadastro da tela de login para testar o perfil de usuário.
+- O backend roda no plano gratuito do Render e "dorme" após inatividade: o primeiro acesso pode levar alguns segundos.
+
 ## Como instalar
 
 Pré-requisitos: **Docker** com **Docker Compose v2** (execução padrão). Para rodar as apps fora do Docker: **Node 22+** e npm.
