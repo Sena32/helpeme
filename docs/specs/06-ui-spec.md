@@ -48,8 +48,10 @@ Fonte: Inter (fallback system-ui). Raio base `0.75rem`. Espaçamento múltiplos 
 - Mensagem abaixo do campo, ligada por `aria-describedby`, com `aria-invalid` no campo; erros da API continuam no topo do formulário (`role="alert"`).
 - Selects de categoria (Nova solicitação, filtro do painel admin) listam só categorias ativas (RF-15).
 
-## Menus suspensos
-- Itens de Select e DropdownMenu usam hover/foco discreto (`bg-muted`, texto `foreground`); a cor de destaque (`accent`) não é usada como hover.
+## Hover discreto
+- A cor de destaque (`accent`) é reservada a ações em destaque (ex.: "Finalizar solicitação"); nunca é usada como hover/foco nem como fundo de carregamento.
+- Itens de Select e DropdownMenu, botões `ghost`/`outline`, badges-link e o botão de fechar do Dialog usam hover/foco discreto (`bg-muted`, texto `foreground`).
+- Skeleton (carregamento) usa `bg-muted`.
 
 ## Galeria de anexos (UI-03, UI-08)
 - Miniaturas clicáveis (botão acessível "Ampliar <nome> (<tamanho>)"). O clique abre um modal (Dialog) **na mesma página** com a imagem ampliada, nome e tamanho.
