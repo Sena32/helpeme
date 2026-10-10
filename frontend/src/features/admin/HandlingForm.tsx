@@ -4,7 +4,7 @@ import { useId } from 'react';
 import { Controller, useForm, useWatch } from 'react-hook-form';
 import { toast } from 'sonner';
 import { FormError } from '@/components/forms/FormError';
-import { PRIORITY_LABELS, STATUS_LABELS } from '@/components/RequestBadges';
+import { STATUS_LABELS } from '@/components/RequestBadges';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import {
@@ -21,11 +21,11 @@ import {
   handlingSchema,
   type HandlingFormValues,
 } from '@/schemas/admin-request';
-import { PRIORITIES, type RequestDetails } from '@/types/requests';
+import type { RequestDetails } from '@/types/requests';
 import { buildHandlingPatch, editableStatuses, toHandlingValues } from './handling-patch';
 
 export function HandlingForm({ request }: { request: RequestDetails }) {
-  const ids = { priority: useId(), status: useId(), note: useId() };
+  const ids = { status: useId(), note: useId() };
   const update = useUpdateRequest(request.id);
   const { control, register, handleSubmit, formState, reset } = useForm<HandlingFormValues>({
     ...LIVE_VALIDATION,
@@ -51,27 +51,6 @@ export function HandlingForm({ request }: { request: RequestDetails }) {
     >
       <FormError error={update.error} />
       <div className="grid gap-4 sm:grid-cols-2">
-        <div className="space-y-2">
-          <Label htmlFor={ids.priority}>Prioridade</Label>
-          <Controller
-            control={control}
-            name="priority"
-            render={({ field }) => (
-              <Select value={field.value} onValueChange={field.onChange}>
-                <SelectTrigger id={ids.priority} className="h-10 w-full">
-                  <SelectValue placeholder="Sem prioridade" />
-                </SelectTrigger>
-                <SelectContent>
-                  {Object.values(PRIORITIES).map((priority) => (
-                    <SelectItem key={priority} value={priority}>
-                      {PRIORITY_LABELS[priority]}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            )}
-          />
-        </div>
         <div className="space-y-2">
           <Label htmlFor={ids.status}>Status</Label>
           <Controller

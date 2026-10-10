@@ -38,7 +38,14 @@ function Handling({ request }: { request: RequestDetails }) {
         <HandlingForm request={request} />
       </RequestSection>
       <RequestSection title="Finalizar">
-        <FinalizeForm requestId={request.id} />
+        {request.status === 'IN_PROGRESS' ? (
+          <FinalizeForm requestId={request.id} />
+        ) : (
+          // RN-07: only requests in progress can be resolved.
+          <p className="text-muted-foreground">
+            Para finalizar, mude o status para "Em resolução" e salve.
+          </p>
+        )}
       </RequestSection>
     </>
   );

@@ -34,8 +34,8 @@ Fonte: Inter (fallback system-ui). Raio base `0.75rem`. Espaçamento múltiplos 
 | ID | Tela | Role | Conteúdo |
 |---|---|---|---|
 | UI-01 | Login / Cadastro (abas) | público | Logo, formulário com validação da política de senha |
-| UI-02 | Dashboard Admin | ADMIN | KPIs (total, abertas, em resolução, finalizadas, alta prioridade) → gráfico por status/categoria → tabela de solicitações (ordenar data/prioridade, filtros, paginação) |
-| UI-03 | Detalhe/Tratamento (Sheet ou página) | ADMIN | Dados, anexos (galeria), selects prioridade/status, observação, resolução, ação Finalizar |
+| UI-02 | Dashboard Admin | ADMIN | KPIs (total, abertas, em resolução, finalizadas, alta prioridade) → gráfico por status/categoria → tabela de solicitações com lista suspensa de prioridade por linha (exceto finalizadas) (ordenar data/prioridade, filtros, paginação) |
+| UI-03 | Detalhe/Tratamento (página) | ADMIN | Dados, anexos (galeria), select de status e observação; formulário "Finalizar" (resolução) só quando o status é "Em resolução". Prioridade não é editada aqui (fica na tabela da UI-02) |
 | UI-04 | Categorias | ADMIN | Lista de todas (ativas e inativas, com badge "Ativa"/"Inativa") + criar categoria (Dialog) + ação "Desativar" com confirmação (AlertDialog) nas ativas |
 | UI-05 | Usuários | ADMIN | Criar usuário/admin (Dialog) |
 | UI-06 | Dashboard User | USER | KPIs próprios → lista das suas solicitações (somente leitura) |

@@ -1,6 +1,6 @@
 import { ArrowDown, ArrowUp, ArrowUpDown } from 'lucide-react';
 import { Link, useNavigate } from 'react-router';
-import { PriorityBadge, StatusBadge } from '@/components/RequestBadges';
+import { StatusBadge } from '@/components/RequestBadges';
 import { Button } from '@/components/ui/button';
 import {
   Table,
@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/table';
 import { formatDate } from '@/lib/format';
 import type { RequestListItem, RequestListQuery } from '@/types/requests';
+import { PrioritySelectCell } from './PrioritySelectCell';
 
 type SortField = NonNullable<RequestListQuery['sortBy']>;
 type SortOrder = NonNullable<RequestListQuery['order']>;
@@ -107,7 +108,7 @@ export function AdminRequestsTable({ items, sortBy, order, onSort }: AdminReques
               <StatusBadge status={item.status} />
             </TableCell>
             <TableCell>
-              <PriorityBadge priority={item.priority} />
+              <PrioritySelectCell item={item} />
             </TableCell>
             <TableCell className="text-muted-foreground">{formatDate(item.createdAt)}</TableCell>
           </TableRow>

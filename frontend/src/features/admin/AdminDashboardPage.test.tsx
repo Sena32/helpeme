@@ -2,7 +2,8 @@ import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { http, HttpResponse } from 'msw';
 import { Route, Routes } from 'react-router';
-import { listItem, listPage, summary } from '@/test/fixtures';
+import { vi } from 'vitest';
+import { listItem, listPage, requestDetails, summary } from '@/test/fixtures';
 import { apiUrl, mswServer } from '@/test/msw-server';
 import { renderWithProviders } from '@/test/render';
 import { AdminDashboardPage } from './AdminDashboardPage';
@@ -14,7 +15,14 @@ const categories = [
 
 function setup({ listResponse = listPage([listItem({ createdBy: { name: 'Bruno' } })]) } = {}) {
   const queries: string[] = [];
+  const patches: Array<{ id: string; body: unknown }> = [];
   mswServer.use(
+    http.patch(apiUrl('/requests/:requestId'), async ({ params, request }) => {
+      patches.push({ id: String(params.requestId), body: await request.json() });
+      return HttpResponse.json({
+        request: requestDetails({ id: String(params.requestId), priority: 'HIGH' }),
+      });
+    }),
     http.get(apiUrl('/categories'), () => HttpResponse.json(categories)),
     http.get(apiUrl('/dashboard/summary'), () =>
       HttpResponse.json(
@@ -38,7 +46,7 @@ function setup({ listResponse = listPage([listItem({ createdBy: { name: 'Bruno' 
     </Routes>,
     { route: '/admin' },
   );
-  return { queries, lastQuery: () => queries.at(-1) ?? '' };
+  return { queries, patches, lastQuery: () => queries.at(-1) ?? '' };
 }
 
 const table = () => screen.findByRole('table', { name: 'Solicitações' });
@@ -161,5 +169,35 @@ describe('AdminDashboardPage (UI-02)', () => {
     await userEvent.click(await screen.findByRole('link', { name: 'Notebook sem rede' }));
 
     expect(await screen.findByText('Tratamento da solicitação')).toBeInTheDocument();
+  });
+
+  it('AC-39: changes the priority from the table without opening the request', async () => {
+    const { patches, queries } = setup();
+    const requestsTable = await table();
+    const requestsBefore = queries.length;
+
+    const select = within(requestsTable).getByRole('combobox', {
+      name: 'Prioridade de Notebook sem rede',
+    });
+    expect(select).toHaveTextContent('Sem prioridade');
+    await userEvent.click(select);
+    await userEvent.click(await screen.findByRole('option', { name: 'Alta' }));
+
+    expect(await screen.findByText('Prioridade atualizada.')).toBeInTheDocument();
+    expect(patches).toEqual([{ id: 'req-1', body: { priority: 'HIGH' } }]);
+    expect(screen.queryByText('Tratamento da solicitação')).not.toBeInTheDocument();
+    await vi.waitFor(() => expect(queries.length).toBeGreaterThan(requestsBefore));
+  });
+
+  it('AC-39: shows only the badge for finalized requests', async () => {
+    setup({
+      listResponse: listPage([
+        listItem({ status: 'RESOLVED', priority: 'LOW', createdBy: { name: 'Bruno' } }),
+      ]),
+    });
+    const requestsTable = await table();
+
+    expect(within(requestsTable).queryByRole('combobox')).not.toBeInTheDocument();
+    expect(within(requestsTable).getByText('Baixa')).toBeInTheDocument();
   });
 });

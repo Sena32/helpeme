@@ -5,7 +5,7 @@ Status: draft · Premissa vale até alguém decidir o contrário.
 |---|---|---|
 | Q-01 | Paleta de cores veio vazia (`[]`) | Paleta indigo/teal definida em SPEC-06 |
 | Q-02 | "Colocar como em resolução" | Status `IN_PROGRESS` rotulado "Em resolução" |
-| Q-03 | Fluxo de status | `OPEN→IN_PROGRESS→RESOLVED`; `OPEN→RESOLVED` permitido; sem reabertura |
+| Q-03 | Fluxo de status | `OPEN→IN_PROGRESS→RESOLVED`; finalizar direto de `OPEN` não é permitido (RN-07 revisada); sem reabertura |
 | Q-04 | Prioridade padrão | Nula até o admin classificar; ordena por último |
 | Q-05 | Quantidade de anexos | Máx. 5 por solicitação, 5 MB cada |
 | Q-06 | Credenciais do admin root vs "sem credencial fixa" | Valores do desafio ficam em `.env.example`/README de teste; o código só lê env |
@@ -30,6 +30,6 @@ Status: draft · Premissa vale até alguém decidir o contrário.
 | Q-25 | UI-06/UI-08 | KPIs do user: total, abertas, em resolução, finalizadas; lista do user ordenada por `createdAt` desc, 10 por página; detalhe em `/solicitacoes/:id` (404 → "não encontrada"); anexos exibidos via endpoint protegido (API-12) |
 | Q-26 | Limites de upload no front (UI-07) | Constantes espelham RN-06 (5 anexos, 5 MB, JPG/PNG) porque a SPEC-03 só expõe `VITE_API_BASE_URL` ao front; validação no cliente inclui assinatura (magic bytes) só para feedback imediato — o backend continua sendo a fonte da verdade e seus erros 400/413 são exibidos. Após criar: toast e redireciona ao detalhe |
 | Q-27 | UI-02 | KPIs: total, abertas, em resolução, finalizadas, alta prioridade; gráficos como barras horizontais com rótulo e valor (status usa as cores semânticas da SPEC-06); filtros/ordenação/página ficam na URL; busca por título ao enviar (Enter/botão); ordem padrão = padrão da API (prioridade desc); linha abre `/admin/solicitacoes/:id` (UI-03, T-20) |
-| Q-28 | UI-03 | Página `/admin/solicitacoes/:id` (não Sheet). Formulário "Tratamento" envia só campos alterados (prioridade, status OPEN→IN_PROGRESS, observação ≤500); "Finalizar" é ação separada com resolução obrigatória e confirmação (RESOLVED é final); finalizada → somente leitura |
+| Q-28 | UI-03 | Página `/admin/solicitacoes/:id` (não Sheet). Formulário "Tratamento" envia só campos alterados (status OPEN→IN_PROGRESS, observação ≤500); prioridade é alterada na tabela da UI-02 (T-29); "Finalizar" (resolução obrigatória + confirmação) só aparece em IN_PROGRESS; finalizada → somente leitura |
 | Q-29 | UI-05 sem listagem de usuários | A API só oferece `POST /users`; a tela tem apenas o Dialog de criação (perfil padrão Usuário) e toast de confirmação. UI-09 (404) implementada junto da T-21 por não estar atribuída a nenhuma tarefa; negação por perfil continua redirecionando à home do perfil (AC-29) |
 | Q-30 | Revisão de acessibilidade (T-22) | Badges de status/prioridade são contornados (texto no tom sobre card/fundo): o tom `warning`/`success` sobre o próprio fundo a 10% dá ~4,2:1 no tema claro (< AA). Contraste é validado nos tokens (jsdom não calcula layout); axe roda em todas as telas no tema escuro sem `color-contrast`. Seletor de tema oferece Claro/Escuro/Sistema; overlays usam o token `--overlay` |

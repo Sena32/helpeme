@@ -45,12 +45,10 @@ describe('planRequestUpdate', () => {
     });
   });
 
-  it('RN-07: allows resolving directly from OPEN', () => {
-    expect(
+  it('AC-38: refuses to resolve directly from OPEN (409)', () => {
+    expect(() =>
       plan(RequestStatus.Open, { status: RequestStatus.Resolved, resolution: 'Ok' }),
-    ).toMatchObject({
-      status: RequestStatus.Resolved,
-    });
+    ).toThrow(ConflictException);
   });
 
   it('AC-23: treats a RESOLVED request as final (409) for any change', () => {

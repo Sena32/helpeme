@@ -26,6 +26,8 @@ Status: ready · Nomeie cada teste com o `AC-xx`.
 | AC-21 | solicitação `IN_PROGRESS` | admin finaliza sem resolução | 400 | RN-08 |
 | AC-22 | solicitação `IN_PROGRESS` | admin finaliza com resolução | `RESOLVED`, `resolvedAt` preenchido | RF-11 |
 | AC-23 | solicitação `RESOLVED` | admin tenta alterar status | 409 | RN-07 |
+| AC-38 | solicitação `OPEN` | admin tenta finalizar (`RESOLVED`) | 409; no front, "Finalizar" só aparece quando o status é "Em resolução" | RN-07 |
+| AC-39 | admin no painel, solicitação não finalizada | escolhe a prioridade na lista suspensa da linha da tabela | prioridade salva (`PATCH {priority}`) sem abrir o detalhe; linha finalizada mostra só o badge | RF-09, RN-09 |
 | AC-24 | admin | cria categoria "Segurança" | 201; repetir "segurança" → 409 | RF-12, RN-04 |
 | AC-25 | user | cria solicitação com categoria inexistente | 400/404 | RN-11 |
 | AC-26 | user | `GET /dashboard/summary` | contagens só das suas | RF-06 |

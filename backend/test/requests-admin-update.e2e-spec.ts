@@ -104,8 +104,18 @@ describe('PATCH /api/requests/:id (API-11)', () => {
     expect(Date.parse(String(requestOf(response).resolvedAt))).not.toBeNaN();
   });
 
+  it('AC-38: finalizing an OPEN request returns 409 and keeps it open', async () => {
+    const id = await openRequest();
+
+    const response = await patch(id, { status: 'RESOLVED', resolution: 'Resolvido.' });
+
+    expect(response.status).toBe(409);
+    await expect(requestModel.findById(id).lean()).resolves.toMatchObject({ status: 'OPEN' });
+  });
+
   it('AC-23: changing the status of a RESOLVED request returns 409', async () => {
     const id = await openRequest();
+    await patch(id, { status: 'IN_PROGRESS' }).expect(200);
     await patch(id, { status: 'RESOLVED', resolution: 'Resolvido.' }).expect(200);
 
     const response = await patch(id, { status: 'IN_PROGRESS' });

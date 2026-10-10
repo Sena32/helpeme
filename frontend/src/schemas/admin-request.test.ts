@@ -2,13 +2,12 @@ import { finalizeRequestSchema, handlingSchema } from './admin-request';
 
 describe('admin handling schemas', () => {
   it('limits the admin note to 500 chars', () => {
+    expect(handlingSchema.safeParse({ status: 'OPEN', adminNote: 'n'.repeat(500) }).success).toBe(
+      true,
+    );
     expect(
-      handlingSchema.safeParse({ priority: '', status: 'OPEN', adminNote: 'n'.repeat(500) })
-        .success,
-    ).toBe(true);
-    expect(
-      handlingSchema.safeParse({ priority: '', status: 'OPEN', adminNote: 'n'.repeat(501) }).error
-        ?.issues[0]?.message,
+      handlingSchema.safeParse({ status: 'OPEN', adminNote: 'n'.repeat(501) }).error?.issues[0]
+        ?.message,
     ).toBe('A observação deve ter no máximo 500 caracteres.');
   });
 

@@ -26,9 +26,9 @@ export const RESOLUTION_REQUIRED_MESSAGE = 'Informe a resolução para finalizar
 export const RESOLUTION_ONLY_ON_RESOLVE_MESSAGE =
   'A resolução só pode ser informada ao finalizar a solicitação.';
 
-// RN-07: RESOLVED is final.
+// RN-07: only IN_PROGRESS requests can be resolved; RESOLVED is final.
 const ALLOWED_TRANSITIONS: Record<RequestStatus, readonly RequestStatus[]> = {
-  [RequestStatus.Open]: [RequestStatus.InProgress, RequestStatus.Resolved],
+  [RequestStatus.Open]: [RequestStatus.InProgress],
   [RequestStatus.InProgress]: [RequestStatus.Resolved],
   [RequestStatus.Resolved]: [],
 };

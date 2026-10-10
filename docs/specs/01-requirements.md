@@ -29,7 +29,7 @@ Status: ready
 | RN-04 | Nome de categoria único (case-insensitive), 2–50 chars. |
 | RN-05 | Título 5–120 chars; descrição 50–1000 chars (após trim). |
 | RN-06 | Anexos: apenas `image/jpeg` e `image/png` (validar assinatura), ≤ 5 MB cada, máx. 5. |
-| RN-07 | Transições válidas: `OPEN→IN_PROGRESS`, `OPEN→RESOLVED`, `IN_PROGRESS→RESOLVED`. `RESOLVED` é final. |
+| RN-07 | Transições válidas: `OPEN→IN_PROGRESS` e `IN_PROGRESS→RESOLVED`. Só é possível finalizar uma solicitação que está em resolução (`IN_PROGRESS`). `RESOLVED` é final. |
 | RN-08 | Finalizar exige `resolution` não vazia (≤ 1000 chars); observação opcional (≤ 500). |
 | RN-09 | Prioridade pode ser alterada enquanto não `RESOLVED`; sem prioridade = não classificada (ordena por último). |
 | RN-10 | User só acessa recursos próprios (403/404 caso contrário). |

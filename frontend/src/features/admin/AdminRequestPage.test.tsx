@@ -59,22 +59,27 @@ describe('AdminRequestPage (UI-03)', () => {
     expect(screen.getByText('Solicitado por Maria Silva')).toBeInTheDocument();
     expect(screen.getByRole('img', { name: 'tela.png' })).toBeInTheDocument();
     const form = await handling();
-    expect(within(form).getByRole('combobox', { name: 'Prioridade' })).toHaveTextContent(
-      'Sem prioridade',
-    );
+    expect(within(form).queryByRole('combobox', { name: 'Prioridade' })).not.toBeInTheDocument();
     expect(within(form).getByRole('combobox', { name: 'Status' })).toHaveTextContent('Aberta');
     expect(within(form).getByRole('button', { name: 'Salvar alterações' })).toBeDisabled();
   });
 
-  it('AC-19: classifies the priority and sends only what changed', async () => {
+  it('AC-38: hides "Finalizar" while the request is open and shows it once in progress', async () => {
     const { patches } = setup(requestDetails());
     await handling();
 
-    await choose('Prioridade', 'Alta');
+    expect(screen.queryByRole('button', { name: 'Finalizar solicitação' })).not.toBeInTheDocument();
+    expect(
+      screen.getByText('Para finalizar, mude o status para "Em resolução" e salve.'),
+    ).toBeInTheDocument();
+
+    await choose('Status', 'Em resolução');
     await userEvent.click(screen.getByRole('button', { name: 'Salvar alterações' }));
 
-    expect(await screen.findByText('Alterações salvas.')).toBeInTheDocument();
-    expect(patches).toEqual([{ priority: 'HIGH' }]);
+    expect(
+      await screen.findByRole('button', { name: 'Finalizar solicitação' }),
+    ).toBeInTheDocument();
+    expect(patches).toEqual([{ status: 'IN_PROGRESS' }]);
   });
 
   it('AC-20: moves to "Em resolução" with a note', async () => {
@@ -144,7 +149,7 @@ describe('AdminRequestPage (UI-03)', () => {
   });
 
   it('lets the admin cancel the finalization', async () => {
-    const { patches } = setup(requestDetails());
+    const { patches } = setup(requestDetails({ status: 'IN_PROGRESS' }));
     await handling();
 
     await userEvent.type(screen.getByLabelText('Resolução'), 'Resolvido.');
@@ -186,7 +191,7 @@ describe('AdminRequestPage (UI-03)', () => {
     );
     await handling();
 
-    await choose('Prioridade', 'Baixa');
+    await userEvent.type(screen.getByLabelText('Observação'), 'Nota.');
     await userEvent.click(screen.getByRole('button', { name: 'Salvar alterações' }));
 
     expect(await screen.findByRole('alert')).toHaveTextContent(
@@ -219,7 +224,7 @@ describe('AdminRequestPage (UI-03)', () => {
   });
 
   it('AC-37: validates the note and the resolution while typing', async () => {
-    setup(requestDetails());
+    setup(requestDetails({ status: 'IN_PROGRESS' }));
     await handling();
     const note = screen.getByLabelText('Observação');
     const resolution = screen.getByLabelText('Resolução');

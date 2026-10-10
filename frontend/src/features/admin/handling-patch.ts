@@ -1,7 +1,7 @@
 import type { HandlingFormValues } from '@/schemas/admin-request';
 import type { AdminRequestUpdate, RequestDetails, RequestStatus } from '@/types/requests';
 
-// RN-07 without the final step: resolving has its own confirmed action.
+// RN-07 without the final step: resolving has its own confirmed action (only from IN_PROGRESS).
 const NEXT_EDITABLE_STATUSES: Record<RequestStatus, readonly RequestStatus[]> = {
   OPEN: ['OPEN', 'IN_PROGRESS'],
   IN_PROGRESS: ['IN_PROGRESS'],
@@ -14,19 +14,18 @@ export function editableStatuses(current: RequestStatus): readonly RequestStatus
 
 export function toHandlingValues(request: RequestDetails): HandlingFormValues {
   return {
-    priority: request.priority ?? '',
     status: request.status,
     adminNote: request.adminNote ?? '',
   };
 }
 
 // Only changed fields are sent, so concurrent edits of other fields are not overwritten.
+// Priority is edited in the requests table (UI-02).
 export function buildHandlingPatch(
   request: RequestDetails,
   values: HandlingFormValues,
 ): AdminRequestUpdate {
   const patch: AdminRequestUpdate = {};
-  if (values.priority && values.priority !== request.priority) patch.priority = values.priority;
   if (values.status !== request.status) patch.status = values.status;
   if (values.adminNote.trim() !== (request.adminNote ?? ''))
     patch.adminNote = values.adminNote.trim();
