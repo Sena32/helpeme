@@ -22,7 +22,7 @@ O navegador só conversa com o domínio da Vercel. As chamadas `/api/*` são rep
 4. **Connect → Drivers** → copie a connection string e acrescente o nome do banco:
 
    ```
-   mongodb+srv://<usuario>:<senha>@<cluster>.mongodb.net/helpeme?retryWrites=true&w=majority&appName=helpeme
+   mongodb+srv://ailtonsenap_db_user:VHKpx3EsUjjY0Gxi@cluster0.ixkmsmt.mongodb.net/?appName=Cluster0
    ```
 
    Se a senha tiver caracteres especiais (`@ : / ? # %`), use-a codificada em URL.
