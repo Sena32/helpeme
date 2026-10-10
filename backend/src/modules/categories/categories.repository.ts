@@ -2,7 +2,7 @@ import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { isValidObjectId, Model, mongo } from 'mongoose';
 import { CATEGORY_ALREADY_EXISTS_MESSAGE, CATEGORY_NAME_COLLATION } from './categories.constants';
-import { CategorySummary } from './categories.types';
+import { CategorySummary, CategoryWithStatus } from './categories.types';
 import { Category } from './schemas/category.model';
 
 const DUPLICATE_KEY_ERROR_CODE = 11000;
@@ -13,6 +13,14 @@ function isDuplicateKeyError(error: unknown): boolean {
 
 function toSummary(category: { _id: { toString(): string }; name: string }): CategorySummary {
   return { id: category._id.toString(), name: category.name };
+}
+
+function toCategoryWithStatus(category: {
+  _id: { toString(): string };
+  name: string;
+  isActive: boolean;
+}): CategoryWithStatus {
+  return { ...toSummary(category), isActive: category.isActive };
 }
 
 @Injectable()
@@ -60,7 +68,23 @@ export class CategoriesRepository {
     );
   }
 
-  async deactivate(categoryId: string): Promise<void> {
-    await this.categoryModel.updateOne({ _id: categoryId }, { $set: { isActive: false } });
+  async findAll(): Promise<CategoryWithStatus[]> {
+    const categories = await this.categoryModel
+      .find()
+      .select('name isActive')
+      .collation(CATEGORY_NAME_COLLATION)
+      .sort({ name: 1 })
+      .lean();
+    return categories.map(toCategoryWithStatus);
+  }
+
+  // RN-12: idempotent; existing requests keep referencing the category.
+  async deactivate(categoryId: string): Promise<CategoryWithStatus | null> {
+    if (!isValidObjectId(categoryId)) return null;
+    const category = await this.categoryModel
+      .findByIdAndUpdate(categoryId, { $set: { isActive: false } }, { new: true })
+      .select('name isActive')
+      .lean();
+    return category ? toCategoryWithStatus(category) : null;
   }
 }

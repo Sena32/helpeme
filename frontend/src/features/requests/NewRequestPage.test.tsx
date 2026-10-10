@@ -15,14 +15,21 @@ const categories = [
 const user = () => userEvent.setup({ applyAccept: false });
 
 function renderPage() {
-  mswServer.use(http.get(apiUrl('/categories'), () => HttpResponse.json(categories)));
-  return renderWithProviders(
+  const categoryQueries: string[] = [];
+  mswServer.use(
+    http.get(apiUrl('/categories'), ({ request }) => {
+      categoryQueries.push(new URL(request.url).search);
+      return HttpResponse.json(categories);
+    }),
+  );
+  renderWithProviders(
     <Routes>
       <Route path="/solicitacoes/nova" element={<NewRequestPage />} />
       <Route path="/solicitacoes/:requestId" element={<p>Detalhe da solicitação criada</p>} />
     </Routes>,
     { route: '/solicitacoes/nova' },
   );
+  return { categoryQueries };
 }
 
 async function fillValidFields(actor: ReturnType<typeof user>) {
@@ -183,5 +190,13 @@ describe('NewRequestPage (UI-07)', () => {
     expect(
       await screen.findByText('Arquivo excede o tamanho máximo permitido.'),
     ).toBeInTheDocument();
+  });
+
+  it('AC-36: asks only for active categories', async () => {
+    const { categoryQueries } = renderPage();
+
+    await screen.findByRole('combobox', { name: 'Categoria' });
+
+    expect(categoryQueries).toEqual(['']);
   });
 });

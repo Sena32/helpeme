@@ -74,12 +74,45 @@ describe('CategoriesRepository', () => {
     });
   });
 
-  it('deactivates a category', async () => {
+  it('RN-12: deactivates a category idempotently and returns it with its status', async () => {
     const category = await repository.create('Infra');
 
-    await repository.deactivate(category.id);
+    const first = await repository.deactivate(category.id);
+    const second = await repository.deactivate(category.id);
 
+    expect(first).toEqual({ id: category.id, name: 'Infra', isActive: false });
+    expect(second).toEqual(first);
     await expect(categoryModel.findById(category.id).lean()).resolves.toMatchObject({
+      isActive: false,
+    });
+  });
+
+  it('returns null when deactivating an unknown or malformed id', async () => {
+    await expect(repository.deactivate('64b7f0c2a1b2c3d4e5f60718')).resolves.toBeNull();
+    await expect(repository.deactivate('abc')).resolves.toBeNull();
+  });
+
+  it('lists every category with its status ordered by name', async () => {
+    const redes = await repository.create('Redes');
+    await repository.create('Banco de dados');
+    await repository.deactivate(redes.id);
+
+    const all = await repository.findAll();
+
+    expect(all.map(({ name, isActive }) => [name, isActive])).toEqual([
+      ['Banco de dados', true],
+      ['Redes', false],
+    ]);
+  });
+
+  it('RN-12: ensuring defaults never reactivates a deactivated category', async () => {
+    await repository.ensureDefaults(['RH']);
+    const rh = await categoryModel.findOne({ name: 'RH' }).lean();
+    await repository.deactivate(String(rh?._id));
+
+    await repository.ensureDefaults(['RH']);
+
+    await expect(categoryModel.findOne({ name: 'RH' }).lean()).resolves.toMatchObject({
       isActive: false,
     });
   });
